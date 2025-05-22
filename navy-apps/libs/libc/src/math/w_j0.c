@@ -6,14 +6,14 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  */
 
 /*
 FUNCTION
-<<jN>>,<<jNf>>,<<yN>>,<<yNf>>---Bessel functions 
+<<jN>>,<<jNf>>,<<yN>>,<<yNf>>---Bessel functions
 
 INDEX
 j0
@@ -90,7 +90,7 @@ float <[x]>;
 
 DESCRIPTION
 The Bessel functions are a family of functions that solve the
-differential equation 
+differential equation
 @ifinfo
 .  2               2    2
 . x  y'' + xy' + (x  - p )y  = 0
@@ -129,60 +129,58 @@ None of the Bessel functions are in ANSI C.
 #define y0 _y0_r
 #endif
 
-#if defined (_LIBM_REENT) || ! defined (_REENT_ONLY)
+#if defined(_LIBM_REENT) || !defined(_REENT_ONLY)
 
 #ifdef __STDC__
-	double j0(_R1 double x)		/* wrapper j0 */
+double j0(_R1 double x) /* wrapper j0 */
 #else
-	double j0(_R2 x)			/* wrapper j0 */
-	_R3 double x;
+double j0(_R2 x) /* wrapper j0 */
+    _R3 double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-	return __ieee754_j0(x);
+    return __ieee754_j0(x);
 #else
-	double z = __ieee754_j0(x);
-	if(_LIB_VERSION == _IEEE_ || isnan(x)) return z;
-	if(fabs(x)>X_TLOSS) {
-	        return __kernel_standard(_R4,x,x,34); /* j0(|x|>X_TLOSS) */
-	} else
-	    return z;
+    double z = __ieee754_j0(x);
+    if (_LIB_VERSION == _IEEE_ || isnan(x)) return z;
+    if (fabs(x) > X_TLOSS) { return __kernel_standard(_R4, x, x, 34); /* j0(|x|>X_TLOSS) */ }
+    else
+        return z;
 #endif
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return (double) _j0f_r (_R4, (float) x);
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)_j0f_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 
 #ifdef __STDC__
-	double y0(_R1 double x)		/* wrapper y0 */
+double y0(_R1 double x) /* wrapper y0 */
 #else
-	double y0(_R2 x)			/* wrapper y0 */
-	_R3 double x;
+double y0(_R2 x) /* wrapper y0 */
+    _R3 double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-	return __ieee754_y0(x);
+    return __ieee754_y0(x);
 #else
-	double z;
-	z = __ieee754_y0(x);
-	if(_LIB_VERSION == _IEEE_ || isnan(x) ) return z;
-        if(x <= 0.0){
-                if(x==0.0)
-                    /* d= -one/(x-x); */
-                    return __kernel_standard(_R4,x,x,8);
-                else
-                    /* d = zero/(x-x); */
-                    return __kernel_standard(_R4,x,x,9);
-        }
-	if(x>X_TLOSS) {
-	        return __kernel_standard(_R4,x,x,35); /* y0(x>X_TLOSS) */
-	} else
-	    return z;
+    double z;
+    z = __ieee754_y0(x);
+    if (_LIB_VERSION == _IEEE_ || isnan(x)) return z;
+    if (x <= 0.0)
+    {
+        if (x == 0.0) /* d= -one/(x-x); */
+            return __kernel_standard(_R4, x, x, 8);
+        else
+            /* d = zero/(x-x); */
+            return __kernel_standard(_R4, x, x, 9);
+    }
+    if (x > X_TLOSS) { return __kernel_standard(_R4, x, x, 35); /* y0(x>X_TLOSS) */ }
+    else
+        return z;
 #endif
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return (double) _y0f_r (_R4, (float) x);
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)_y0f_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

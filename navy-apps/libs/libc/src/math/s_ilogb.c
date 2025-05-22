@@ -6,7 +6,7 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  */
@@ -15,17 +15,17 @@
 FUNCTION
        <<ilogb>>, <<ilogbf>>---get exponent of floating point number
 INDEX
-	ilogb
+    ilogb
 INDEX
-	ilogbf
+    ilogbf
 
 ANSI_SYNOPSIS
-	#include <math.h>
+    #include <math.h>
         int ilogb(double <[val]>);
         int ilogbf(float <[val]>);
 
 TRAD_SYNOPSIS
-	#include <math.h>
+    #include <math.h>
         int ilogb(<[val]>)
         double <[val]>;
 
@@ -35,11 +35,11 @@ TRAD_SYNOPSIS
 
 DESCRIPTION
 
-	All non zero, normal numbers can be described as <[m]> *
-	2**<[p]>.  <<ilogb>> and <<ilogbf>> examine the argument
-	<[val]>, and return <[p]>.  The functions <<frexp>> and
-	<<frexpf>> are similar to <<ilogb>> and <<ilogbf>>, but also
-	return <[m]>.
+    All non zero, normal numbers can be described as <[m]> *
+    2**<[p]>.  <<ilogb>> and <<ilogbf>> examine the argument
+    <[val]>, and return <[p]>.  The functions <<frexp>> and
+    <<frexpf>> are similar to <<ilogb>> and <<ilogbf>>, but also
+    return <[m]>.
 
 RETURNS
 
@@ -49,8 +49,8 @@ INT_MAX>> (<<INT_MAX>> is defined in limits.h).  If <[val]> is
 infinite, or NaN, they return <<INT_MAX>>.
 
 PORTABILITY
-	Neither <<ilogb>> nor <<ilogbf>> is required by ANSI C or by
-	the System V Interface Definition (Issue 2).  */
+    Neither <<ilogb>> nor <<ilogbf>> is required by ANSI C or by
+    the System V Interface Definition (Issue 2).  */
 
 /* ilogb(double x)
  * return the binary exponent of non-zero x
@@ -62,31 +62,37 @@ PORTABILITY
 #include <limits.h>
 
 #ifdef __STDC__
-	int ilogb(double x)
+int ilogb(double x)
 #else
-	int ilogb(x)
-	double x;
+int    ilogb(x)
+double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
-	__int32_t hx,lx,ix;
+    __int32_t hx, lx, ix;
 
-	EXTRACT_WORDS(hx,lx,x);
-	hx &= 0x7fffffff;
-	if(hx<0x00100000) {
-	    if((hx|lx)==0) 
-		return - INT_MAX;	/* ilogb(0) = 0x80000001 */
-	    else			/* subnormal x */
-		if(hx==0) {
-		    for (ix = -1043; lx>0; lx<<=1) ix -=1;
-		} else {
-		    for (ix = -1022,hx<<=11; hx>0; hx<<=1) ix -=1;
-		}
-	    return ix;
-	}
-	else if (hx<0x7ff00000) return (hx>>20)-1023;
-	else return INT_MAX;
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return ilogbf ((float) x);
+    EXTRACT_WORDS(hx, lx, x);
+    hx &= 0x7fffffff;
+    if (hx < 0x00100000)
+    {
+        if ((hx | lx) == 0)
+            return -INT_MAX; /* ilogb(0) = 0x80000001 */
+        else                 /* subnormal x */
+            if (hx == 0)
+            {
+                for (ix = -1043; lx > 0; lx <<= 1) ix -= 1;
+            }
+            else
+            {
+                for (ix = -1022, hx <<= 11; hx > 0; hx <<= 1) ix -= 1;
+            }
+        return ix;
+    }
+    else if (hx < 0x7ff00000)
+        return (hx >> 20) - 1023;
+    else
+        return INT_MAX;
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return ilogbf((float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

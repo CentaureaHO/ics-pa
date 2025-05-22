@@ -6,52 +6,52 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  */
 
 /*
 FUNCTION
-	<<hypot>>, <<hypotf>>---distance from origin
+    <<hypot>>, <<hypotf>>---distance from origin
 INDEX
-	hypot
+    hypot
 INDEX
-	hypotf
+    hypotf
 
 ANSI_SYNOPSIS
-	#include <math.h>
-	double hypot(double <[x]>, double <[y]>);
-	float hypotf(float <[x]>, float <[y]>);
+    #include <math.h>
+    double hypot(double <[x]>, double <[y]>);
+    float hypotf(float <[x]>, float <[y]>);
 
 TRAD_SYNOPSIS
-	double hypot(<[x]>, <[y]>)
-	double <[x]>, <[y]>;
+    double hypot(<[x]>, <[y]>)
+    double <[x]>, <[y]>;
 
-	float hypotf(<[x]>, <[y]>)
-	float <[x]>, <[y]>;
+    float hypotf(<[x]>, <[y]>)
+    float <[x]>, <[y]>;
 
 DESCRIPTION
-	<<hypot>> calculates the Euclidean distance
-	@tex
-	$\sqrt{x^2+y^2}$
-	@end tex
-	@ifinfo
-	<<sqrt(<[x]>*<[x]> + <[y]>*<[y]>)>>
-	@end ifinfo
-	between the origin (0,0) and a point represented by the
-	Cartesian coordinates (<[x]>,<[y]>).  <<hypotf>> differs only
-	in the type of its arguments and result.
+    <<hypot>> calculates the Euclidean distance
+    @tex
+    $\sqrt{x^2+y^2}$
+    @end tex
+    @ifinfo
+    <<sqrt(<[x]>*<[x]> + <[y]>*<[y]>)>>
+    @end ifinfo
+    between the origin (0,0) and a point represented by the
+    Cartesian coordinates (<[x]>,<[y]>).  <<hypotf>> differs only
+    in the type of its arguments and result.
 
 RETURNS
-	Normally, the distance value is returned.  On overflow,
-	<<hypot>> returns <<HUGE_VAL>> and sets <<errno>> to
-	<<ERANGE>>.
+    Normally, the distance value is returned.  On overflow,
+    <<hypot>> returns <<HUGE_VAL>> and sets <<errno>> to
+    <<ERANGE>>.
 
-	You can change the error treatment with <<matherr>>.
+    You can change the error treatment with <<matherr>>.
 
 PORTABILITY
-	<<hypot>> and <<hypotf>> are not ANSI C.  */
+    <<hypot>> and <<hypotf>> are not ANSI C.  */
 
 /*
  * wrapper hypot(x,y)
@@ -63,29 +63,29 @@ PORTABILITY
 #define hypot _hypot_r
 #endif
 
-#if defined (_LIBM_REENT) || ! defined (_REENT_ONLY)
+#if defined(_LIBM_REENT) || !defined(_REENT_ONLY)
 
 #ifdef __STDC__
-	double hypot(_R1 double x, double y)/* wrapper hypot */
+double hypot(_R1 double x, double y) /* wrapper hypot */
 #else
-	double hypot(_R2 x,y)		/* wrapper hypot */
-	_R3 double x,y;
+double     hypot(_R2 x, y) /* wrapper hypot */
+_R3 double x, y;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-	return __ieee754_hypot(x,y);
+    return __ieee754_hypot(x, y);
 #else
-	double z;
-	z = __ieee754_hypot(x,y);
-	if(_LIB_VERSION == _IEEE_) return z;
-	if((!finite(z))&&finite(x)&&finite(y))
-	    return __kernel_standard(_R4,x,y,4); /* hypot overflow */
-	else
-	    return z;
+    double z;
+    z = __ieee754_hypot(x, y);
+    if (_LIB_VERSION == _IEEE_) return z;
+    if ((!finite(z)) && finite(x) && finite(y))
+        return __kernel_standard(_R4, x, y, 4); /* hypot overflow */
+    else
+        return z;
 #endif
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return (double) _hypotf_r (_R4, (float) x, (float) y);
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)_hypotf_r(_R4, (float)x, (float)y);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

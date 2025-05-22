@@ -8,12 +8,12 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  */
 
-/* 
+/*
  * wrapper sqrtf(x)
  */
 
@@ -23,26 +23,28 @@
 #define sqrtf _sqrtf_r
 #endif
 
-#if defined (_LIBM_REENT) || ! defined (_REENT_ONLY)
+#if defined(_LIBM_REENT) || !defined(_REENT_ONLY)
 
 #ifdef __STDC__
-	float sqrtf(_R1 float x)		/* wrapper sqrtf */
+float sqrtf(_R1 float x) /* wrapper sqrtf */
 #else
-	float sqrt(_R2 x)			/* wrapper sqrtf */
-	_R3 float x;
+float sqrt(_R2 x) /* wrapper sqrtf */
+    _R3 float x;
 #endif
 {
 #ifdef _IEEE_LIBM
-	return __ieee754_sqrtf(x);
+    return __ieee754_sqrtf(x);
 #else
-	float z;
-	z = __ieee754_sqrtf(x);
-	if(_LIB_VERSION == _IEEE_ || isnanf(x)) return z;
-	if(x<(float)0.0) {
-	    /* sqrtf(negative) */
-	    return (float)__kernel_standard(_R4,(double)x,(double)x,126);
-	} else
-	    return z;
+    float z;
+    z = __ieee754_sqrtf(x);
+    if (_LIB_VERSION == _IEEE_ || isnanf(x)) return z;
+    if (x < (float)0.0)
+    {
+        /* sqrtf(negative) */
+        return (float)__kernel_standard(_R4, (double)x, (double)x, 126);
+    }
+    else
+        return z;
 #endif
 }
 

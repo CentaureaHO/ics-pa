@@ -32,21 +32,21 @@ int
 scanf (const char *fmt, ...)
 #else
 scanf (fmt, va_alist)
-     char *fmt;
-     va_dcl
+char* fmt;
+va_dcl
 #endif
 {
-  int ret;
-  va_list ap;
+    int     ret;
+    va_list ap;
 
 #ifdef _HAVE_STDC
-  va_start (ap, fmt);
+    va_start(ap, fmt);
 #else
-  va_start (ap);
+    va_start(ap);
 #endif
-  ret = __svfscanf (_stdin_r (_REENT), fmt, ap);
-  va_end (ap);
-  return ret;
+    ret = __svfscanf(_stdin_r(_REENT), fmt, ap);
+    va_end(ap);
+    return ret;
 }
 
 #endif
@@ -56,20 +56,20 @@ int
 _scanf_r (struct _reent *ptr, const char *fmt, ...)
 #else
 _scanf_r (ptr, fmt, va_alist)
-     struct _reent *ptr;
-     char *fmt;
-     va_dcl
+struct _reent* ptr;
+char*          fmt;
+va_dcl
 #endif
 {
-  int ret;
-  va_list ap;
+    int     ret;
+    va_list ap;
 
 #ifdef _HAVE_STDC
-  va_start (ap, fmt);
+    va_start(ap, fmt);
 #else
-  va_start (ap);
+    va_start(ap);
 #endif
-  ret = __svfscanf (_stdin_r (ptr), fmt, ap);
-  va_end (ap);
-  return (ret);
+    ret = __svfscanf(_stdin_r(ptr), fmt, ap);
+    va_end(ap);
+    return (ret);
 }

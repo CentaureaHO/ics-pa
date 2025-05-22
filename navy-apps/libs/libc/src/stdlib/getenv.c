@@ -3,18 +3,18 @@ FUNCTION
 <<getenv>>---look up environment variable
 
 INDEX
-	getenv
+    getenv
 INDEX
-	environ
+    environ
 
 ANSI_SYNOPSIS
-	#include <stdlib.h>
-	char *getenv(const char *<[name]>);
+    #include <stdlib.h>
+    char *getenv(const char *<[name]>);
 
 TRAD_SYNOPSIS
-	#include <stdlib.h>
-	char *getenv(<[name]>)
-	char *<[name]>;
+    #include <stdlib.h>
+    char *getenv(<[name]>)
+    char *<[name]>;
 
 DESCRIPTION
 <<getenv>> searches the list of environment variable names and values
@@ -61,7 +61,7 @@ variables vary from one system to another.
 #include <stddef.h>
 #include <string.h>
 
-extern char **environ;
+extern char** environ;
 
 /*
  * _findenv --
@@ -73,31 +73,28 @@ extern char **environ;
  *	This routine *should* be a static; don't use it.
  */
 
-char *
-_DEFUN (_findenv, (name, offset),
-	register _CONST char *name _AND
-	int *offset)
+char* _DEFUN(_findenv, (name, offset), register _CONST char* name _AND int* offset)
 {
-  register int len;
-  register char **p;
-  _CONST char *c;
+    register int    len;
+    register char** p;
+    _CONST char*    c;
 
-  c = name;
-  len = 0;
-  while (*c && *c != '=')
+    c   = name;
+    len = 0;
+    while (*c && *c != '=')
     {
-      c++;
-      len++;
+        c++;
+        len++;
     }
 
-  for (p = environ; *p; ++p)
-    if (!strncmp (*p, name, len))
-      if (*(c = *p + len) == '=')
-	{
-	  *offset = p - environ;
-	  return (char *) (++c);
-	}
-  return NULL;
+    for (p = environ; *p; ++p)
+        if (!strncmp(*p, name, len))
+            if (*(c = *p + len) == '=')
+            {
+                *offset = p - environ;
+                return (char*)(++c);
+            }
+    return NULL;
 }
 
 /*
@@ -105,12 +102,10 @@ _DEFUN (_findenv, (name, offset),
  *	Returns ptr to value associated with name, if any, else NULL.
  */
 
-char *
-_DEFUN (getenv, (name),
-	_CONST char *name)
+char* _DEFUN(getenv, (name), _CONST char* name)
 {
-  int offset;
-  char *_findenv ();
+    int   offset;
+    char* _findenv();
 
-  return _findenv (name, &offset);
+    return _findenv(name, &offset);
 }

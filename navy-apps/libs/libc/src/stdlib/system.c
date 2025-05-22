@@ -3,24 +3,24 @@ FUNCTION
 <<system>>---execute command string
 
 INDEX
-	system
+    system
 INDEX
-	_system_r
+    _system_r
 
 ANSI_SYNOPSIS
-	#include <stdlib.h>
-	int system(char *<[s]>);
+    #include <stdlib.h>
+    int system(char *<[s]>);
 
-	int _system_r(void *<[reent]>, char *<[s]>);
+    int _system_r(void *<[reent]>, char *<[s]>);
 
 TRAD_SYNOPSIS
-	#include <stdlib.h>
-	int system(<[s]>)
-	char *<[s]>;
+    #include <stdlib.h>
+    int system(<[s]>)
+    char *<[s]>;
 
-	int _system_r(<[reent]>, <[s]>)
-	char *<[reent]>;
-	char *<[s]>;
+    int _system_r(<[reent]>, <[s]>)
+    char *<[reent]>;
+    char *<[s]>;
 
 DESCRIPTION
 
@@ -57,55 +57,53 @@ Supporting OS subroutines required: <<_exit>>, <<execve>>, <<fork>>,
 #include <_syslist.h>
 
 #ifndef NO_EXEC
-extern int execve ();
-extern int fork ();
-extern int wait ();
+extern int execve();
+extern int fork();
+extern int wait();
 
-extern char *environ[];
+extern char* environ[];
 #endif
 
-int
-_system_r (ptr, s)
-     struct _reent *ptr;
-     _CONST char *s;
+int            _system_r(ptr, s)
+struct _reent* ptr;
+_CONST char*   s;
 {
-  char *argv[4];
-  int pid, status;
+    char* argv[4];
+    int   pid, status;
 
 #ifdef NO_EXEC
-  return 0;
+    return 0;
 #else
-  argv[0] = "sh";
-  argv[1] = "-c";
-  if (s == NULL)
-    argv[2] = (char *) "exit 0";
-  else
-    argv[2] = (char *) s;
-  argv[3] = NULL;
+    argv[0] = "sh";
+    argv[1] = "-c";
+    if (s == NULL)
+        argv[2] = (char*)"exit 0";
+    else
+        argv[2] = (char*)s;
+    argv[3] = NULL;
 
-  if ((pid = _fork_r (ptr)) == 0)
+    if ((pid = _fork_r(ptr)) == 0)
     {
-      _execve ("/bin/sh", argv, environ);
-      exit (100);
+        _execve("/bin/sh", argv, environ);
+        exit(100);
     }
-  else if (pid == -1)
-    return s == NULL ? 0 : -1;
-  else
+    else if (pid == -1)
+        return s == NULL ? 0 : -1;
+    else
     {
-      _wait_r (ptr, &status);
-      status = (status >> 8) & 0xff;
-      return s == NULL ? status == 0 : status;
+        _wait_r(ptr, &status);
+        status = (status >> 8) & 0xff;
+        return s == NULL ? status == 0 : status;
     }
 #endif
 }
 
 #ifndef _REENT_ONLY
 
-int
-system (s)
-     _CONST char *s;
+int          system(s)
+_CONST char* s;
 {
-  return _system_r (_REENT, s);
+    return _system_r(_REENT, s);
 }
 
 #endif

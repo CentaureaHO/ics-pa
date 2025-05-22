@@ -6,7 +6,7 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  *
@@ -43,7 +43,7 @@ Arguments to <<asin>> must be in the range @minus{}1 to 1.
 <<asinf>> is identical to <<asin>>, other than taking and
 returning floats.
 
-You can modify error handling for these routines using <<matherr>>. 
+You can modify error handling for these routines using <<matherr>>.
 
 RETURNS
 @ifinfo
@@ -63,21 +63,20 @@ QUICKREF ANSI SVID POSIX RENTRANT
  asin	 y,y,y,m
  asinf   n,n,n,m
 
-MATHREF  
+MATHREF
  asin,  -1<=arg<=1, asin(arg),,,
  asin,  NAN,  arg,EDOM, DOMAIN
 
-MATHREF  
+MATHREF
  asinf,  -1<=arg<=1, asin(arg),,,
- asinf,  NAN,  arg,EDOM, DOMAIN 
+ asinf,  NAN,  arg,EDOM, DOMAIN
 
 
 */
 
-/* 
+/*
  * wrapper asin(x)
  */
-
 
 #include "fdlibm.h"
 
@@ -85,29 +84,28 @@ MATHREF
 #define asin _asin_r
 #endif
 
-#if defined (_LIBM_REENT) || ! defined (_REENT_ONLY)
+#if defined(_LIBM_REENT) || !defined(_REENT_ONLY)
 
 #ifdef __STDC__
-	double asin(_R1 double x)		/* wrapper asin */
+double asin(_R1 double x) /* wrapper asin */
 #else
-	double asin(_R2 x)			/* wrapper asin */
-	_R3 double x;
+double asin(_R2 x) /* wrapper asin */
+    _R3 double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-	return __ieee754_asin(x);
+    return __ieee754_asin(x);
 #else
-	double z;
-	z = __ieee754_asin(x);
-	if(_LIB_VERSION == _IEEE_ || isnan(x)) return z;
-	if(fabs(x)>1.0) {
-	        return __kernel_standard(_R4,x,x,2); /* asin(|x|>1) */
-	} else
-	    return z;
+    double z;
+    z = __ieee754_asin(x);
+    if (_LIB_VERSION == _IEEE_ || isnan(x)) return z;
+    if (fabs(x) > 1.0) { return __kernel_standard(_R4, x, x, 2); /* asin(|x|>1) */ }
+    else
+        return z;
 #endif
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return (double) _asinf_r (_R4, (float) x);
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)_asinf_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

@@ -20,16 +20,16 @@ FUNCTION
 <<ferror>>---test whether read/write error has occurred
 
 INDEX
-	ferror
+    ferror
 
 ANSI_SYNOPSIS
-	#include <stdio.h>
-	int ferror(FILE *<[fp]>);
+    #include <stdio.h>
+    int ferror(FILE *<[fp]>);
 
 TRAD_SYNOPSIS
-	#include <stdio.h>
-	int ferror(<[fp]>)
-	FILE *<[fp]>;
+    #include <stdio.h>
+    int ferror(<[fp]>)
+    FILE *<[fp]>;
 
 DESCRIPTION
 The <<stdio>> functions maintain an error indicator with each file
@@ -59,9 +59,4 @@ static char sccsid[] = "%W% (Berkeley) %G%";
 
 #undef ferror
 
-int
-_DEFUN (ferror, (fp),
-	FILE * fp)
-{
-  return __sferror (fp);
-}
+int _DEFUN(ferror, (fp), FILE* fp) { return __sferror(fp); }

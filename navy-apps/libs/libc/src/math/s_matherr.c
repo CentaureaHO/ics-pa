@@ -6,7 +6,7 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  */
@@ -14,19 +14,19 @@
 /*
 
 FUNCTION
-	<<matherr>>---modifiable math error handler
+    <<matherr>>---modifiable math error handler
 
-INDEX 
-	matherr
+INDEX
+    matherr
 
 ANSI_SYNOPSIS
-	#include <math.h>
-	int matherr(struct exception *<[e]>);
+    #include <math.h>
+    int matherr(struct exception *<[e]>);
 
 TRAD_SYNOPSIS
-	#include <math.h>
-	int matherr(*<[e]>)
-	struct exception *<[e]>;
+    #include <math.h>
+    int matherr(*<[e]>)
+    struct exception *<[e]>;
 
 DESCRIPTION
 <<matherr>> is called whenever a math library function generates an error.
@@ -79,15 +79,15 @@ The requested calculation would result in a singularity; e.g. <<pow(0.0,-2.0)>>
 
 o OVERFLOW
 A calculation would produce a result too large to represent; e.g.
-<<exp(1000.0)>>. 
+<<exp(1000.0)>>.
 
 o UNDERFLOW
 A calculation would produce a result too small to represent; e.g.
-<<exp(-1000.0)>>. 
+<<exp(-1000.0)>>.
 
 o TLOSS
 Total loss of precision.  The result would have no significant digits;
-e.g. <<sin(10e70)>>. 
+e.g. <<sin(10e70)>>.
 
 o PLOSS
 Partial loss of precision.
@@ -105,18 +105,18 @@ the error) the caller sets <<errno>> to an appropriate value, and prints
 an error message.
 
 PORTABILITY
-<<matherr>> is not ANSI C.  
+<<matherr>> is not ANSI C.
 */
 
 #include "fdlibm.h"
 
 #ifdef __STDC__
-	int matherr(struct exception *x)
+int matherr(struct exception* x)
 #else
-	int matherr(x)
-	struct exception *x;
+int               matherr(x)
+struct exception* x;
 #endif
 {
-  assert(0);
-  return 0;
+    assert(0);
+    return 0;
 }

@@ -5,10 +5,10 @@
 
 #include "fdlibm.h"
 
-	float infinityf()
+float infinityf()
 {
-	float x;
+    float x;
 
-	SET_FLOAT_WORD(x,0x7f800000);
-	return x;
+    SET_FLOAT_WORD(x, 0x7f800000);
+    return x;
 }

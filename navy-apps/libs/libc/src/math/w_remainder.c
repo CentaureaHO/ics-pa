@@ -6,7 +6,7 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  */
@@ -15,31 +15,31 @@
 FUNCTION
 <<rint>>, <<rintf>>, <<remainder>>, <<remainderf>>---round and  remainder
 INDEX
-	rint
+    rint
 INDEX
-	rintf
+    rintf
 INDEX
-	remainder
+    remainder
 INDEX
-	remainderf
+    remainderf
 
 ANSI_SYNOPSIS
-	#include <math.h>
-	double rint(double <[x]>);
-	float rintf(float <[x]>);
-	double remainder(double <[x]>, double <[y]>);
-	float remainderf(float <[x]>, float <[y]>);
+    #include <math.h>
+    double rint(double <[x]>);
+    float rintf(float <[x]>);
+    double remainder(double <[x]>, double <[y]>);
+    float remainderf(float <[x]>, float <[y]>);
 
 TRAD_SYNOPSIS
-	#include <math.h>
-	double rint(<[x]>)
-	double <[x]>;
-	float rintf(<[x]>)
-	float <[x]>;
-	double remainder(<[x]>,<[y]>)
-	double <[x]>, <[y]>;
-	float remainderf(<[x]>,<[y]>)
-	float <[x]>, <[y]>;
+    #include <math.h>
+    double rint(<[x]>)
+    double <[x]>;
+    float rintf(<[x]>)
+    float <[x]>;
+    double remainder(<[x]>,<[y]>)
+    double <[x]>, <[y]>;
+    float remainderf(<[x]>,<[y]>)
+    float <[x]>, <[y]>;
 
 DESCRIPTION
 <<rint>> and <<rintf>> returns their argument rounded to the nearest
@@ -55,7 +55,7 @@ PORTABILITY
 
 */
 
-/* 
+/*
  * wrapper remainder(x,p)
  */
 
@@ -65,28 +65,28 @@ PORTABILITY
 #define remainder _remainder_r
 #endif
 
-#if defined (_LIBM_REENT) || ! defined (_REENT_ONLY)
+#if defined(_LIBM_REENT) || !defined(_REENT_ONLY)
 #ifdef __STDC__
-	double remainder(_R1 double x, double y)	/* wrapper remainder */
+double remainder(_R1 double x, double y) /* wrapper remainder */
 #else
-	double remainder(_R2 x,y)			/* wrapper remainder */
-	_R3 double x,y;
+double     remainder(_R2 x, y) /* wrapper remainder */
+_R3 double x, y;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-	return __ieee754_remainder(x,y);
+    return __ieee754_remainder(x, y);
 #else
-	double z;
-	z = __ieee754_remainder(x,y);
-	if(_LIB_VERSION == _IEEE_ || isnan(y)) return z;
-	if(y==0.0) 
-	    return __kernel_standard(_R4,x,y,28); /* remainder(x,0) */
-	else
-	    return z;
+    double z;
+    z = __ieee754_remainder(x, y);
+    if (_LIB_VERSION == _IEEE_ || isnan(y)) return z;
+    if (y == 0.0)
+        return __kernel_standard(_R4, x, y, 28); /* remainder(x,0) */
+    else
+        return z;
 #endif
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return (double) _remainderf_r (_R4, (float) x, (float) y);
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)_remainderf_r(_R4, (float)x, (float)y);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

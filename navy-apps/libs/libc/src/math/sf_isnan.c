@@ -8,7 +8,7 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  */
@@ -21,15 +21,15 @@
 #include "fdlibm.h"
 
 #ifdef __STDC__
-	int isnanf(float x)
+int isnanf(float x)
 #else
-	int isnanf(x)
-	float x;
+int   isnanf(x)
+float x;
 #endif
 {
-	__int32_t ix;
-	GET_FLOAT_WORD(ix,x);
-	ix &= 0x7fffffff;
-	ix = 0x7f800000 - ix;
-	return (int)(((__uint32_t)(ix))>>31);
+    __int32_t ix;
+    GET_FLOAT_WORD(ix, x);
+    ix &= 0x7fffffff;
+    ix = 0x7f800000 - ix;
+    return (int)(((__uint32_t)(ix)) >> 31);
 }

@@ -19,53 +19,53 @@ FUNCTION
 <<malloc>>, <<realloc>>, <<free>>---manage memory
 
 INDEX
-	malloc
+    malloc
 INDEX
-	realloc
+    realloc
 INDEX
-	free
+    free
 INDEX
-	_malloc_r
+    _malloc_r
 INDEX
-	_realloc_r
+    _realloc_r
 INDEX
-	_free_r
+    _free_r
 
 ANSI_SYNOPSIS
-	#include <stdlib.h>
-	void *malloc(size_t <[nbytes]>);
-	void *realloc(void *<[aptr]>, size_t <[nbytes]>);
-	void free(void *<[aptr]>);
+    #include <stdlib.h>
+    void *malloc(size_t <[nbytes]>);
+    void *realloc(void *<[aptr]>, size_t <[nbytes]>);
+    void free(void *<[aptr]>);
 
-	void *_malloc_r(void *<[reent]>, size_t <[nbytes]>);
-	void *_realloc_r(void *<[reent]>, 
+    void *_malloc_r(void *<[reent]>, size_t <[nbytes]>);
+    void *_realloc_r(void *<[reent]>,
                          void *<[aptr]>, size_t <[nbytes]>);
-	void _free_r(void *<[reent]>, void *<[aptr]>);
+    void _free_r(void *<[reent]>, void *<[aptr]>);
 
 TRAD_SYNOPSIS
-	#include <stdlib.h>
-	char *malloc(<[nbytes]>)
-	size_t <[nbytes]>;
+    #include <stdlib.h>
+    char *malloc(<[nbytes]>)
+    size_t <[nbytes]>;
 
-	char *realloc(<[aptr]>, <[nbytes]>)
-	char *<[aptr]>;
-	size_t <[nbytes]>;
+    char *realloc(<[aptr]>, <[nbytes]>)
+    char *<[aptr]>;
+    size_t <[nbytes]>;
 
-	void free(<[aptr]>)
-	char *<[aptr]>;
+    void free(<[aptr]>)
+    char *<[aptr]>;
 
-	char *_malloc_r(<[reent]>,<[nbytes]>)
-	char *<[reent]>;
-	size_t <[nbytes]>;
+    char *_malloc_r(<[reent]>,<[nbytes]>)
+    char *<[reent]>;
+    size_t <[nbytes]>;
 
-	char *_realloc_r(<[reent]>, <[aptr]>, <[nbytes]>)
-	char *<[reent]>;
-	char *<[aptr]>;
-	size_t <[nbytes]>;
+    char *_realloc_r(<[reent]>, <[aptr]>, <[nbytes]>)
+    char *<[reent]>;
+    char *<[aptr]>;
+    size_t <[nbytes]>;
 
-	void _free_r(<[reent]>, <[aptr]>)
-	char *<[reent]>;
-	char *<[aptr]>;
+    void _free_r(<[reent]>, <[aptr]>)
+    char *<[reent]>;
+    char *<[aptr]>;
 
 DESCRIPTION
 These functions manage a pool of system memory.
@@ -126,27 +126,11 @@ Supporting OS subroutines required: <<sbrk>>, <<write>> (if WARN_VLIMIT).
 
 #ifndef _REENT_ONLY
 
-_PTR
-_DEFUN (malloc, (nbytes),
-	size_t nbytes)		/* get a block */
-{
-  return _malloc_r (_REENT, nbytes);
-}
+_PTR _DEFUN(malloc, (nbytes), size_t nbytes) /* get a block */ { return _malloc_r(_REENT, nbytes); }
 
-void
-_DEFUN (free, (aptr),
-	_PTR aptr)
-{
-  _free_r (_REENT, aptr);
-}
+void _DEFUN(free, (aptr), _PTR aptr) { _free_r(_REENT, aptr); }
 
-_PTR
-_DEFUN (realloc, (ap, nbytes),
-	_PTR ap _AND
-	size_t nbytes)
-{
-  return _realloc_r (_REENT, ap, nbytes);
-}
+_PTR _DEFUN(realloc, (ap, nbytes), _PTR ap _AND size_t nbytes) { return _realloc_r(_REENT, ap, nbytes); }
 
 #endif
 

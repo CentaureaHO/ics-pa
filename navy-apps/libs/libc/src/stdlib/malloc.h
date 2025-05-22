@@ -1,7 +1,7 @@
 #ifndef _MALLOC_H_
 #define _MALLOC_H_
 
-typedef _PTR mptr;		/* a generic pointer, eg: (void *) */
+typedef _PTR mptr; /* a generic pointer, eg: (void *) */
 
 /* #define debug */
 /* #define rcheck */
@@ -14,12 +14,12 @@ typedef _PTR mptr;		/* a generic pointer, eg: (void *) */
  */
 
 #ifndef INT32
-#define INT32	int
+#define INT32 int
 #endif
 
 #ifdef debug
 #include <assert.h>
-#define ASSERT(p)	assert(p)
+#define ASSERT(p) assert(p)
 #else
 #define ASSERT(p)
 #endif
@@ -33,14 +33,14 @@ typedef _PTR mptr;		/* a generic pointer, eg: (void *) */
 #endif
 
 #ifndef MALLOC_ALIGNMENT
-#define MALLOC_ALIGNMENT	4
+#define MALLOC_ALIGNMENT 4
 #endif
-#define ALIGN(x)	(((x) + MALLOC_ALIGNMENT - 1) & ~(MALLOC_ALIGNMENT - 1))
+#define ALIGN(x) (((x) + MALLOC_ALIGNMENT - 1) & ~(MALLOC_ALIGNMENT - 1))
 
 #ifdef rcheck
-#define OVERHEAD	ALIGN(12)	/* make sure the range checkers will fit */
+#define OVERHEAD ALIGN(12) /* make sure the range checkers will fit */
 #else
-#define OVERHEAD	ALIGN(4)
+#define OVERHEAD ALIGN(4)
 #endif
 
 #endif /* _MALLOC_H_ */

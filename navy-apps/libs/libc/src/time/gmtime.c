@@ -13,14 +13,14 @@ FUNCTION
 <<gmtime>>---convert time to UTC traditional form
 
 INDEX
-	gmtime
+    gmtime
 
 ANSI_SYNOPSIS
-	#include <time.h>
-	struct tm *gmtime(const time_t *<[timep]>
+    #include <time.h>
+    struct tm *gmtime(const time_t *<[timep]>
 
 TRAD_SYNOPSIS
-	#include <time.h>
+    #include <time.h>
 
 DESCRIPTION
 <<gmtime>> assumes the time at <[timep]> represents a local time.
@@ -47,11 +47,9 @@ ANSI C requires <<gmtime>>.
 
 #define _GMT_OFFSET 0
 
-struct tm *
-_DEFUN (gmtime, (tim_p),
-	_CONST time_t * tim_p)
+struct tm* _DEFUN(gmtime, (tim_p), _CONST time_t* tim_p)
 {
-  time_t tim = *tim_p + _GMT_OFFSET;
+    time_t tim = *tim_p + _GMT_OFFSET;
 
-  return (localtime (&tim));
+    return (localtime(&tim));
 }

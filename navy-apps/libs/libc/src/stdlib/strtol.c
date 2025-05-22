@@ -3,26 +3,26 @@ FUNCTION
    <<strtol>>---string to long
 
 INDEX
-	strtol
+    strtol
 INDEX
-	_strtol_r
+    _strtol_r
 
 ANSI_SYNOPSIS
-	#include <stdlib.h>
+    #include <stdlib.h>
         long strtol(const char *<[s]>, char **<[ptr]>,int <[base]>);
 
-        long _strtol_r(void *<[reent]>, 
+        long _strtol_r(void *<[reent]>,
                        const char *<[s]>, char **<[ptr]>,int <[base]>);
 
 TRAD_SYNOPSIS
-	#include <stdlib.h>
-	long strtol (<[s]>, <[ptr]>, <[base]>)
+    #include <stdlib.h>
+    long strtol (<[s]>, <[ptr]>, <[base]>)
         char *<[s]>;
         char **<[ptr]>;
         int <[base]>;
 
-	long _strtol_r (<[reent]>, <[s]>, <[ptr]>, <[base]>)
-	char *<[reent]>;
+    long _strtol_r (<[reent]>, <[s]>, <[ptr]>, <[base]>)
+    char *<[reent]>;
         char *<[s]>;
         char **<[ptr]>;
         int <[base]>;
@@ -90,59 +90,47 @@ No supporting OS subroutines are required.
 #include <_ansi.h>
 #include "std.h"
 
-long
-_DEFUN (_strtol_r, (rptr, s, ptr, base),
-	struct _reent *rptr _AND
-	_CONST char *s _AND
-	char **ptr _AND
-	int base)
+long _DEFUN(_strtol_r, (rptr, s, ptr, base), struct _reent* rptr _AND _CONST char* s _AND char** ptr _AND int base)
 {
-  int minus = 0;
-  unsigned long tmp;
-  _CONST char *start = s;
-  char *eptr;
+    int           minus = 0;
+    unsigned long tmp;
+    _CONST char*  start = s;
+    char*         eptr;
 
-  if (s == NULL)
+    if (s == NULL)
     {
-      rptr->_errno = ERANGE;
-      if (!ptr)
-	*ptr = (char *) start;
-      return 0L;
+        rptr->_errno = ERANGE;
+        if (!ptr) *ptr = (char*)start;
+        return 0L;
     }
-  while (Isspace (*s))
-    s++;
-  if (*s == '-')
+    while (Isspace(*s)) s++;
+    if (*s == '-')
     {
-      s++;
-      minus = 1;
+        s++;
+        minus = 1;
     }
-  else if (*s == '+')
-    s++;
+    else if (*s == '+')
+        s++;
 
-  /*
-   * Let _strtoul_r do the hard work.
-   */
+    /*
+     * Let _strtoul_r do the hard work.
+     */
 
-  tmp = _strtoul_r (rptr, s, &eptr, base);
-  if (ptr != NULL)
-    *ptr = (char *) ((eptr == s) ? start : eptr);
-  if (tmp > (minus ? - (unsigned long) LONG_MIN : (unsigned long) LONG_MAX))
+    tmp = _strtoul_r(rptr, s, &eptr, base);
+    if (ptr != NULL) *ptr = (char*)((eptr == s) ? start : eptr);
+    if (tmp > (minus ? -(unsigned long)LONG_MIN : (unsigned long)LONG_MAX))
     {
-      rptr->_errno = ERANGE;
-      return (minus ? LONG_MIN : LONG_MAX);
+        rptr->_errno = ERANGE;
+        return (minus ? LONG_MIN : LONG_MAX);
     }
-  return (minus ? (long) -tmp : (long) tmp);
+    return (minus ? (long)-tmp : (long)tmp);
 }
 
 #ifndef _REENT_ONLY
 
-long
-_DEFUN (strtol, (s, ptr, base),
-	_CONST char *s _AND
-	char **ptr _AND
-	int base)
+long _DEFUN(strtol, (s, ptr, base), _CONST char* s _AND char** ptr _AND int base)
 {
-  return _strtol_r (_REENT, s, ptr, base);
+    return _strtol_r(_REENT, s, ptr, base);
 }
 
 #endif

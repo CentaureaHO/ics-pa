@@ -18,16 +18,16 @@ FUNCTION
 <<ldiv>>---divide two long integers
 
 INDEX
-	ldiv
+    ldiv
 
 ANSI_SYNOPSIS
-	#include <stdlib.h>
-	ldiv_t ldiv(long <[n]>, long <[d]>);
+    #include <stdlib.h>
+    ldiv_t ldiv(long <[n]>, long <[d]>);
 
 TRAD_SYNOPSIS
-	#include <stdlib.h>
-	ldiv_t ldiv(<[n]>, <[d]>)
-	long <[n]>, <[d]>;
+    #include <stdlib.h>
+    ldiv_t ldiv(<[n]>, <[d]>)
+    long <[n]>, <[d]>;
 
 DESCRIPTION
 Divide
@@ -68,31 +68,28 @@ No supporting OS subroutines are required.
 #include <limits.h>
 #include <stdlib.h>
 
-ldiv_t 
-ldiv (n, d)
-     long n, d;
+ldiv_t ldiv(n, d)
+long   n, d;
 {
-  ldiv_t res;
+    ldiv_t res;
 
-  if (d)
+    if (d)
     {
-      res.quot = labs (n) / labs (d);
-      res.rem = labs (n) % labs (d);
+        res.quot = labs(n) / labs(d);
+        res.rem  = labs(n) % labs(d);
 
-      if ((n < 0 && d > 0) || (n >= 0 && d < 0))
-	res.quot = -res.quot;
-      if (n < 0)
-	res.rem = -res.rem;
+        if ((n < 0 && d > 0) || (n >= 0 && d < 0)) res.quot = -res.quot;
+        if (n < 0) res.rem = -res.rem;
     }
-  else
+    else
     {
-      if (n < 0)
-	res.quot = LONG_MIN;
-      else
-	res.quot = LONG_MAX;
+        if (n < 0)
+            res.quot = LONG_MIN;
+        else
+            res.quot = LONG_MAX;
 
-      res.rem = 0;
+        res.rem = 0;
     }
 
-  return res;
+    return res;
 }

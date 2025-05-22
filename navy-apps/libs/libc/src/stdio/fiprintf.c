@@ -2,7 +2,7 @@
 FUNCTION
         <<fiprintf>>---format output to file (integer only)
 INDEX
-	fiprintf
+    fiprintf
 
 ANSI_SYNOPSIS
         #include <stdio.h>
@@ -10,11 +10,11 @@ ANSI_SYNOPSIS
         int fiprintf(FILE *<[fd]>, const char *<[format]>, ...);
 
 TRAD_SYNOPSIS
-	#include <stdio.h>
+    #include <stdio.h>
 
-	int fiprintf(<[fd]>, <[format]> [, <[arg]>, ...]);
-	FILE *<[fd]>;
-	char *<[format]>;
+    int fiprintf(<[fd]>, <[format]> [, <[arg]>, ...]);
+    FILE *<[fd]>;
+    char *<[format]>;
 
 DESCRIPTION
 <<fiprintf>> is a restricted version of <<fprintf>>: it has the same
@@ -35,4 +35,3 @@ PORTABILITY
 Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 <<lseek>>, <<read>>, <<sbrk>>, <<write>>.
 */
-

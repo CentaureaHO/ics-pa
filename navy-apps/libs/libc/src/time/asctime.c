@@ -15,26 +15,26 @@ FUNCTION
 <<asctime>>---format time as string
 
 INDEX
-	asctime
+    asctime
 INDEX
-	_asctime_r
+    _asctime_r
 
 ANSI_SYNOPSIS
-	#include <time.h>
-	char *asctime(const struct tm *<[timp]>);
+    #include <time.h>
+    char *asctime(const struct tm *<[timp]>);
 
-	#include <time.h>
-	char *_asctime_r(const struct tm *<[timp]>, void *<[reent]>);
+    #include <time.h>
+    char *_asctime_r(const struct tm *<[timp]>, void *<[reent]>);
 
 TRAD_SYNOPSIS
-	#include <time.h>
-	char *asctime(<[timp]>)
-	struct tm *<[timp]>;
+    #include <time.h>
+    char *asctime(<[timp]>)
+    struct tm *<[timp]>;
 
-	#include <time.h>
-	char *_asctime_r(<[timp]>, <[reent]>)
-	struct tm *<[timp]>;
-	char *<[reent]>;
+    #include <time.h>
+    char *_asctime_r(<[timp]>, <[reent]>)
+    struct tm *<[timp]>;
+    char *<[reent]>;
 
 DESCRIPTION
 Format the time value at <[timp]> into a string of the form
@@ -59,34 +59,29 @@ ANSI C requires <<asctime>>.
 #include <time.h>
 #include <reent.h>
 
-char *
-_DEFUN (_asctime_r, (tim_p, data),
-	_CONST struct tm *tim_p _AND
-	void *data)
+char* _DEFUN(_asctime_r, (tim_p, data), _CONST struct tm* tim_p _AND void* data)
 {
-  static _CONST char day_name[7][3]
-    = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-  static _CONST char mon_name[12][3]
-    = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
-	 "Sep", "Oct", "Nov", "Dec"};
+    static _CONST char day_name[7][3]  = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+    static _CONST char mon_name[12][3] = {
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-  struct _reent *p = data;
+    struct _reent* p = data;
 
-  sprintf (p->_asctime, "%.3s %.3s %.2d %.2d:%.2d:%.2d %d\n",
-	   day_name[tim_p->tm_wday], mon_name[tim_p->tm_mon],
-	   tim_p->tm_mday, tim_p->tm_hour, tim_p->tm_min,
-	   tim_p->tm_sec, 1900 + tim_p->tm_year);
+    sprintf(p->_asctime,
+        "%.3s %.3s %.2d %.2d:%.2d:%.2d %d\n",
+        day_name[tim_p->tm_wday],
+        mon_name[tim_p->tm_mon],
+        tim_p->tm_mday,
+        tim_p->tm_hour,
+        tim_p->tm_min,
+        tim_p->tm_sec,
+        1900 + tim_p->tm_year);
 
-  return p->_asctime;
+    return p->_asctime;
 }
 
 #ifndef _REENT_ONLY
 
-char *
-_DEFUN (asctime, (tim_p),
-	_CONST struct tm *tim_p)
-{
-  return _asctime_r (tim_p, _REENT);
-}
+char* _DEFUN(asctime, (tim_p), _CONST struct tm* tim_p) { return _asctime_r(tim_p, _REENT); }
 
 #endif

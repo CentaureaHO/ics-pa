@@ -3,20 +3,20 @@ FUNCTION
 <<qsort>>---sort an array
 
 INDEX
-	qsort
+    qsort
 
 ANSI_SYNOPSIS
-	#include <stdlib.h>
-	void qsort(void *<[base]>, size_t <[nmemb]>, size_t <[size]>,
-		   int (*<[compar]>)(const void *, const void *) );
+    #include <stdlib.h>
+    void qsort(void *<[base]>, size_t <[nmemb]>, size_t <[size]>,
+           int (*<[compar]>)(const void *, const void *) );
 
 TRAD_SYNOPSIS
-	#include <stdlib.h>
-	qsort(<[base]>, <[nmemb]>, <[size]>, <[compar]> )
-	char *<[base]>;
-	size_t <[nmemb]>;
-	size_t <[size]>;
-	int (*<[compar]>)();
+    #include <stdlib.h>
+    qsort(<[base]>, <[nmemb]>, <[size]>, <[compar]> )
+    char *<[base]>;
+    size_t <[nmemb]>;
+    size_t <[size]>;
+    int (*<[compar]>)();
 
 DESCRIPTION
 <<qsort>> sorts an array (beginning at <[base]>) of <[nmemb]> objects.
@@ -62,129 +62,99 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 #include <stdlib.h>
 #include <string.h>
 
-static int
-_DEFUN (find_pivot, (base, i, j, size, compar),
-	_PTR base _AND
-	int i _AND
-	int j _AND
-	size_t size _AND
-	int (*compar) ())
+static int _DEFUN(
+    find_pivot, (base, i, j, size, compar), _PTR base _AND int i _AND int j _AND size_t size _AND int (*compar)())
 {
-  _PTR first_key;
-  _PTR next_key;
-  int k, res;
+    _PTR first_key;
+    _PTR next_key;
+    int  k, res;
 
-  first_key = (_PTR) (((char *) base) + (i * size));
-  next_key = first_key;
+    first_key = (_PTR)(((char*)base) + (i * size));
+    next_key  = first_key;
 
-  for (k = i + 1; k <= j; k++)
+    for (k = i + 1; k <= j; k++)
     {
-      next_key = (_PTR) (((char *) next_key) + size);
-      res = (*compar) (next_key, first_key);
+        next_key = (_PTR)(((char*)next_key) + size);
+        res      = (*compar)(next_key, first_key);
 
-      if (res > 0)
-	return k;
-      else if (res < 0)
-	return i;
+        if (res > 0)
+            return k;
+        else if (res < 0)
+            return i;
     }
 
-  return -1;
+    return -1;
 }
 
-static void
-_DEFUN (swap, (base, i, j, size),
-	_PTR base _AND
-	int i _AND
-	int j _AND
-	size_t size)
+static void _DEFUN(swap, (base, i, j, size), _PTR base _AND int i _AND int j _AND size_t size)
 {
 #ifdef __GNUC__
-  _PTR temp = __builtin_alloca (size);
+    _PTR temp = __builtin_alloca(size);
 #else
-  static _PTR temp = NULL;
-  static size_t max_size = 0;
+    static _PTR   temp     = NULL;
+    static size_t max_size = 0;
 #endif
 
-  _PTR elem1, *elem2;
+    _PTR elem1, *elem2;
 
 #ifndef __GNUC__
-  if (size > max_size)
+    if (size > max_size)
     {
-      temp = realloc (temp, size);
-      max_size = size;
+        temp     = realloc(temp, size);
+        max_size = size;
     }
 #endif
 
-  elem1 = (_PTR) (((char *) base) + (i * size));
-  elem2 = (_PTR) (((char *) base) + (j * size));
+    elem1 = (_PTR)(((char*)base) + (i * size));
+    elem2 = (_PTR)(((char*)base) + (j * size));
 
-  memcpy (temp, elem1, size);
-  memcpy (elem1, elem2, size);
-  memcpy (elem2, temp, size);
+    memcpy(temp, elem1, size);
+    memcpy(elem1, elem2, size);
+    memcpy(elem2, temp, size);
 }
 
-static int
-_DEFUN (partition, (base, i, j, pivot_index, size, compar),
-	_PTR base _AND
-	int i _AND
-	int j _AND
-	int pivot_index _AND
-	size_t size _AND
-	int (*compar) ())
+static int _DEFUN(partition, (base, i, j, pivot_index, size, compar),
+    _PTR base _AND int i _AND int j _AND int pivot_index _AND size_t size _AND int (*compar)())
 {
-  int left, right;
+    int left, right;
 
-  left = i;
-  right = j;
+    left  = i;
+    right = j;
 
-  do
-    {
-      swap (base, left, right, size);
+    do {
+        swap(base, left, right, size);
 
-      if (pivot_index == left)
-	pivot_index = right;
-      else if (pivot_index == right)
-	pivot_index = left;
+        if (pivot_index == left)
+            pivot_index = right;
+        else if (pivot_index == right)
+            pivot_index = left;
 
-      while (compar ((_PTR) (((char *) base) + (left * size)),
-		     (_PTR) (((char *) base) + (pivot_index * size))) < 0)
-	left++;
+        while (compar((_PTR)(((char*)base) + (left * size)), (_PTR)(((char*)base) + (pivot_index * size))) < 0) left++;
 
-      while (compar ((_PTR) (((char *) base) + (right * size)),
-		     (_PTR) (((char *) base) + (pivot_index * size))) >= 0)
-	right--;
+        while (compar((_PTR)(((char*)base) + (right * size)), (_PTR)(((char*)base) + (pivot_index * size))) >= 0)
+            right--;
 
-    }
-  while (left <= right);
+    } while (left <= right);
 
-  return left;
+    return left;
 }
 
-static void
-_DEFUN (inside_qsort, (base, i, j, size, compar),
-	_PTR base _AND
-	int i _AND
-	int j _AND
-	size_t size _AND
-	int (*compar) ())
+static void _DEFUN(
+    inside_qsort, (base, i, j, size, compar), _PTR base _AND int i _AND int j _AND size_t size _AND int (*compar)())
 {
-  int pivot_index, mid;
+    int pivot_index, mid;
 
-  if ((pivot_index = find_pivot (base, i, j, size, compar)) != -1)
+    if ((pivot_index = find_pivot(base, i, j, size, compar)) != -1)
     {
-      mid = partition (base, i, j, pivot_index, size, compar);
+        mid = partition(base, i, j, pivot_index, size, compar);
 
-      inside_qsort (base, i, mid - 1, size, compar);
-      inside_qsort (base, mid, j, size, compar);
+        inside_qsort(base, i, mid - 1, size, compar);
+        inside_qsort(base, mid, j, size, compar);
     }
 }
 
-_VOID 
-_DEFUN (qsort, (base, nmemb, size, compar),
-	_PTR base _AND
-	size_t nmemb _AND
-	size_t size _AND
-	int (*compar) ())
+_VOID
+_DEFUN(qsort, (base, nmemb, size, compar), _PTR base _AND size_t nmemb _AND size_t size _AND int (*compar)())
 {
-  inside_qsort (base, 0, nmemb - 1, size, compar);
+    inside_qsort(base, 0, nmemb - 1, size, compar);
 }

@@ -12,16 +12,16 @@ FUNCTION
 <<localtime>>---convert time to local representation
 
 INDEX
-	localtime
+    localtime
 
 ANSI_SYNOPSIS
-	#include <time.h>
-	struct tm *localtime(time_t *<[timep]>);
+    #include <time.h>
+    struct tm *localtime(time_t *<[timep]>);
 
 TRAD_SYNOPSIS
-	#include <time.h>
-	struct tm *localtime(<[timep]>)
-	time_t *<[timep]>;
+    #include <time.h>
+    struct tm *localtime(<[timep]>)
+    time_t *<[timep]>;
 
 DESCRIPTION
 <<localtime>> converts the time at <[timep]> into local time, then
@@ -48,80 +48,66 @@ ANSI C requires <<localtime>>.
 
 #define _SEC_IN_DAY 86400
 
-static _CONST int _DAYS_IN_MONTH[12] =
-  {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+static _CONST int _DAYS_IN_MONTH[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 #define _DAYS_IN_YEAR(year) (((year) % 4) ? 365 : 366)
 
-/* Shouldn't this appear in the reent struct? */ 
+/* Shouldn't this appear in the reent struct? */
 static struct tm tim_s;
 
-struct tm *
-_DEFUN (localtime, (tim_p),
-	_CONST time_t * tim_p)
+struct tm* _DEFUN(localtime, (tim_p), _CONST time_t* tim_p)
 {
-  ldiv_t res;
-  long days, hms;
-  int dim1;
-  /* compute days, hours, minutes & seconds */
-  res = ldiv ((long) *tim_p, _SEC_IN_DAY);
+    ldiv_t res;
+    long   days, hms;
+    int    dim1;
+    /* compute days, hours, minutes & seconds */
+    res = ldiv((long)*tim_p, _SEC_IN_DAY);
 
-  if (res.rem < 0)
+    if (res.rem < 0)
     {
-      days = res.quot - 1;
-      hms = res.rem + _SEC_IN_DAY;
+        days = res.quot - 1;
+        hms  = res.rem + _SEC_IN_DAY;
     }
-  else
+    else
     {
-      days = res.quot;
-      hms = res.rem;
+        days = res.quot;
+        hms  = res.rem;
     }
 
-  tim_s.tm_sec = hms % 60;
-  tim_s.tm_min = (hms /= 60) % 60;
-  tim_s.tm_hour = hms / 60;
+    tim_s.tm_sec  = hms % 60;
+    tim_s.tm_min  = (hms /= 60) % 60;
+    tim_s.tm_hour = hms / 60;
 
-  /* compute day of week */
-  if ((tim_s.tm_wday = (days + 4) % 7) < 0)
-    tim_s.tm_wday += 7;
+    /* compute day of week */
+    if ((tim_s.tm_wday = (days + 4) % 7) < 0) tim_s.tm_wday += 7;
 
-  /* compute year & day of year */
-  if (days >= 0)
+    /* compute year & day of year */
+    if (days >= 0)
     {
-      for (tim_s.tm_year = 70; days >= _DAYS_IN_YEAR (tim_s.tm_year);
-	   tim_s.tm_year++)
-	days -= _DAYS_IN_YEAR (tim_s.tm_year);
+        for (tim_s.tm_year = 70; days >= _DAYS_IN_YEAR(tim_s.tm_year); tim_s.tm_year++)
+            days -= _DAYS_IN_YEAR(tim_s.tm_year);
     }
-  else
+    else
     {
-      for (tim_s.tm_year = 70; days < 0; tim_s.tm_year--)
-	days += _DAYS_IN_YEAR (tim_s.tm_year);
+        for (tim_s.tm_year = 70; days < 0; tim_s.tm_year--) days += _DAYS_IN_YEAR(tim_s.tm_year);
     }
-  tim_s.tm_yday = days;
+    tim_s.tm_yday = days;
 
-  /* compute month & day of month */
-  if (_DAYS_IN_YEAR (tim_s.tm_year) == 366)
-    dim1 = 29;
-  else
-    dim1 = 28;
+    /* compute month & day of month */
+    if (_DAYS_IN_YEAR(tim_s.tm_year) == 366)
+        dim1 = 29;
+    else
+        dim1 = 28;
 
-  for (tim_s.tm_mon = 0;
-       days >= _DAYS_IN_MONTH[tim_s.tm_mon];
-       tim_s.tm_mon++)
+    for (tim_s.tm_mon = 0; days >= _DAYS_IN_MONTH[tim_s.tm_mon]; tim_s.tm_mon++)
     {
-      if (tim_s.tm_mon == 1)
-	{
-	  days -= dim1;
-	}
-      else
-	{
-	  days -= _DAYS_IN_MONTH[tim_s.tm_mon];
-	}
+        if (tim_s.tm_mon == 1) { days -= dim1; }
+        else { days -= _DAYS_IN_MONTH[tim_s.tm_mon]; }
     }
-  tim_s.tm_mday = days + 1;
+    tim_s.tm_mday = days + 1;
 
-  /* set Daylight Saving Time flag */
-  tim_s.tm_isdst = -1;
+    /* set Daylight Saving Time flag */
+    tim_s.tm_isdst = -1;
 
-  return (&tim_s);
+    return (&tim_s);
 }

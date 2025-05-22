@@ -6,7 +6,7 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  *
@@ -16,21 +16,21 @@
 #include <errno.h>
 
 #ifndef _USE_WRITE
-#include <stdio.h>			/* fputs(), stderr */
-#define	WRITE2(u,v)	fputs(u, _stderr_r(p))
-#else	/* !defined(_USE_WRITE) */
-#include <unistd.h>			/* write */
-#define	WRITE2(u,v)	_write_r(p, 2, u, v)
+#include <stdio.h> /* fputs(), stderr */
+#define WRITE2(u, v) fputs(u, _stderr_r(p))
+#else               /* !defined(_USE_WRITE) */
+#include <unistd.h> /* write */
+#define WRITE2(u, v) _write_r(p, 2, u, v)
 #undef fflush
-#endif	/* !defined(_USE_WRITE) */
+#endif /* !defined(_USE_WRITE) */
 
 #ifdef __STDC__
-static const double zero = 0.0;	/* used as const */
+static const double zero = 0.0; /* used as const */
 #else
-static double zero = 0.0;	/* used as const */
+static double zero = 0.0; /* used as const */
 #endif
 
-/* 
+/*
  * Standard conformance (non-IEEE) on exception cases.
  * Mapping:
  *	1 -- acos(|x|>1)
@@ -55,7 +55,7 @@ static double zero = 0.0;	/* used as const */
  *	20-- pow(0.0,0.0)
  *	21-- pow(x,y) overflow
  *	22-- pow(x,y) underflow
- *	23-- pow(0,negative) 
+ *	23-- pow(0,negative)
  *	24-- pow(neg,non-integral)
  *	25-- sinh(finite) overflow
  *	26-- sqrt(negative)
@@ -80,14 +80,13 @@ static double zero = 0.0;	/* used as const */
 #include <assert.h>
 
 #ifdef __STDC__
-	double __kernel_standard(struct _reent *p, double x, double y,
-				 int type) 
+double __kernel_standard(struct _reent* p, double x, double y, int type)
 #else
-	double __kernel_standard(p,x,y,type) 
-	struct _reent *p; double x,y; int type;
+double         __kernel_standard(p, x, y, type)
+struct _reent* p;
+double         x, y;
+int            type;
 #endif
 {
-  assert(0);
+    assert(0);
 }
-
-

@@ -3,35 +3,35 @@ FUNCTION
 <<rand>>, <<srand>>---pseudo-random numbers
 
 INDEX
-	rand
+    rand
 INDEX
-	srand
+    srand
 INDEX
-	_rand_r
+    _rand_r
 INDEX
-	_srand_r
+    _srand_r
 
 ANSI_SYNOPSIS
-	#include <stdlib.h>
-	int rand(void);
-	void srand(unsigned int <[seed]>);
+    #include <stdlib.h>
+    int rand(void);
+    void srand(unsigned int <[seed]>);
 
-	int _rand_r(void *<[reent]>);
-	void _srand_r(void *<[reent]>, unsigned int <[seed]>);
+    int _rand_r(void *<[reent]>);
+    void _srand_r(void *<[reent]>, unsigned int <[seed]>);
 
 TRAD_SYNOPSIS
-	#include <stdlib.h>
-	int rand();
+    #include <stdlib.h>
+    int rand();
 
-	void srand(<[seed]>)
-	unsigned int <[seed]>;
+    void srand(<[seed]>)
+    unsigned int <[seed]>;
 
-	int _rand_r(<[reent]>);
-	char *<[reent]>
+    int _rand_r(<[reent]>);
+    char *<[reent]>
 
-	void _srand_r(<[data]>,<[seed]>)
-	char *<[reent]>;
-	unsigned int <[seed]>;
+    void _srand_r(<[data]>,<[seed]>)
+    char *<[reent]>;
+    unsigned int <[seed]>;
 
 
 DESCRIPTION
@@ -74,35 +74,18 @@ on two different systems.
 #include <stdlib.h>
 #include <reent.h>
 
-int
-_DEFUN (_rand_r, (ptr),
-	struct _reent *ptr)
+int _DEFUN(_rand_r, (ptr), struct _reent* ptr)
 {
-  ptr->_next = (ptr->_next * 1103515245) + 12345;
-  return ((ptr->_next >> 16) & 0x7fff);
+    ptr->_next = (ptr->_next * 1103515245) + 12345;
+    return ((ptr->_next >> 16) & 0x7fff);
 }
 
-void
-_DEFUN (_srand_r, (ptr, seed),
-	struct _reent *ptr _AND
-	unsigned int seed)
-{
-  ptr->_next = seed;
-}
+void _DEFUN(_srand_r, (ptr, seed), struct _reent* ptr _AND unsigned int seed) { ptr->_next = seed; }
 
 #ifndef _REENT_ONLY
 
-int
-_DEFUN_VOID (rand)
-{
-  return _rand_r (_REENT);
-}
+int _DEFUN_VOID(rand) { return _rand_r(_REENT); }
 
-void
-_DEFUN (srand, (seed),
-	unsigned int seed)
-{
-  _srand_r (_REENT, seed);
-}
+void _DEFUN(srand, (seed), unsigned int seed) { _srand_r(_REENT, seed); }
 
 #endif

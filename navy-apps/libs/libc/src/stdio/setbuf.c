@@ -20,17 +20,17 @@ FUNCTION
 <<setbuf>>---specify full buffering for a file or stream
 
 INDEX
-	setbuf
+    setbuf
 
 ANSI_SYNOPSIS
-	#include <stdio.h>
-	void setbuf(FILE *<[fp]>, char *<[buf]>);
+    #include <stdio.h>
+    void setbuf(FILE *<[fp]>, char *<[buf]>);
 
 TRAD_SYNOPSIS
-	#include <stdio.h>
-	void setbuf(<[fp]>, <[buf]>)
-	FILE *<[fp]>;
-	char *<[buf]>;
+    #include <stdio.h>
+    void setbuf(<[fp]>, <[buf]>)
+    FILE *<[fp]>;
+    char *<[buf]>;
 
 DESCRIPTION
 <<setbuf>> specifies that output to the file or stream identified by <[fp]>
@@ -70,10 +70,4 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 #include <stdio.h>
 #include "local.h"
 
-void
-_DEFUN (setbuf, (fp, buf),
-	FILE * fp _AND
-	char *buf)
-{
-  (void) setvbuf (fp, buf, buf ? _IOFBF : _IONBF, BUFSIZ);
-}
+void _DEFUN(setbuf, (fp, buf), FILE* fp _AND char* buf) { (void)setvbuf(fp, buf, buf ? _IOFBF : _IONBF, BUFSIZ); }

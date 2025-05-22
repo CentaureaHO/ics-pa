@@ -8,13 +8,13 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  *
  */
 
-/* 
+/*
  * wrapper atan2f(y,x)
  */
 
@@ -24,26 +24,28 @@
 #define atan2f _atan2f_r
 #endif
 
-#if defined (_LIBM_REENT) || ! defined (_REENT_ONLY)
+#if defined(_LIBM_REENT) || !defined(_REENT_ONLY)
 
 #ifdef __STDC__
-	float atan2f(_R1 float y, float x)		/* wrapper atan2f */
+float atan2f(_R1 float y, float x) /* wrapper atan2f */
 #else
-	float atan2f(_R2 y,x)			/* wrapper atan2 */
-	_R3 float y,x;
+float     atan2f(_R2 y, x) /* wrapper atan2 */
+_R3 float y, x;
 #endif
 {
 #ifdef _IEEE_LIBM
-	return __ieee754_atan2f(y,x);
+    return __ieee754_atan2f(y, x);
 #else
-	float z;
-	z = __ieee754_atan2f(y,x);
-	if(_LIB_VERSION == _IEEE_||isnanf(x)||isnanf(y)) return z;
-	if(x==(float)0.0&&y==(float)0.0) {
-		/* atan2f(+-0,+-0) */
-	        return (float)__kernel_standard(_R4,(double)y,(double)x,103);
-	} else
-	    return z;
+    float z;
+    z = __ieee754_atan2f(y, x);
+    if (_LIB_VERSION == _IEEE_ || isnanf(x) || isnanf(y)) return z;
+    if (x == (float)0.0 && y == (float)0.0)
+    {
+        /* atan2f(+-0,+-0) */
+        return (float)__kernel_standard(_R4, (double)y, (double)x, 103);
+    }
+    else
+        return z;
 #endif
 }
 

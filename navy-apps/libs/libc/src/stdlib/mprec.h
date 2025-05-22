@@ -18,19 +18,18 @@
  ***************************************************************/
 
 /* Please send bug reports to
-	David M. Gay
-	AT&T Bell Laboratories, Room 2C-463
-	600 Mountain Avenue
-	Murray Hill, NJ 07974-2070
-	U.S.A.
-	dmg@research.att.com or research!dmg
+    David M. Gay
+    AT&T Bell Laboratories, Room 2C-463
+    600 Mountain Avenue
+    Murray Hill, NJ 07974-2070
+    U.S.A.
+    dmg@research.att.com or research!dmg
  */
 
 #include <ieeefp.h>
 #include <math.h>
 #include <float.h>
 #include <errno.h>
-
 
 #ifdef __IEEE_LITTLE_ENDIAN
 #define IEEE_8087
@@ -46,14 +45,18 @@
 
 #ifdef DEBUG
 #include "stdio.h"
-#define Bug(x) {fprintf(stderr, "%s\n", x); exit(1);}
+#define Bug(x)                      \
+    {                               \
+        fprintf(stderr, "%s\n", x); \
+        exit(1);                    \
+    }
 #endif
 
-
 #ifdef Unsigned_Shifts
-#define Sign_Extend(a,b) if (b < 0) a |= 0xffff0000;
+#define Sign_Extend(a, b) \
+    if (b < 0) a |= 0xffff0000;
 #else
-#define Sign_Extend(a,b) /*no-op*/
+#define Sign_Extend(a, b) /*no-op*/
 #endif
 
 #if defined(IEEE_8087) + defined(IEEE_MC68k) + defined(VAX) + defined(IBM) != 1
@@ -61,11 +64,11 @@ Exactly one of IEEE_8087, IEEE_MC68k, VAX, or IBM should be defined.
 #endif
 
 #ifdef IEEE_8087
-#define word0(x) ((unsigned long *)&x)[1]
-#define word1(x) ((unsigned long *)&x)[0]
+#define word0(x) ((unsigned long*)&x)[1]
+#define word1(x) ((unsigned long*)&x)[0]
 #else
-#define word0(x) ((unsigned long *)&x)[0]
-#define word1(x) ((unsigned long *)&x)[1]
+#define word0(x) ((unsigned long*)&x)[0]
+#define word1(x) ((unsigned long*)&x)[1]
 #endif
 
 /* The following definition of Storeinc is appropriate for MIPS processors.
@@ -73,11 +76,11 @@ Exactly one of IEEE_8087, IEEE_MC68k, VAX, or IBM should be defined.
  * #define Storeinc(a,b,c) (*a++ = b << 16 | c & 0xffff)
  */
 #if defined(IEEE_8087) + defined(VAX)
-#define Storeinc(a,b,c) (((unsigned short *)a)[1] = (unsigned short)b, \
-((unsigned short *)a)[0] = (unsigned short)c, a++)
+#define Storeinc(a, b, c) \
+    (((unsigned short*)a)[1] = (unsigned short)b, ((unsigned short*)a)[0] = (unsigned short)c, a++)
 #else
-#define Storeinc(a,b,c) (((unsigned short *)a)[0] = (unsigned short)b, \
-((unsigned short *)a)[1] = (unsigned short)c, a++)
+#define Storeinc(a, b, c) \
+    (((unsigned short*)a)[0] = (unsigned short)b, ((unsigned short*)a)[1] = (unsigned short)c, a++)
 #endif
 
 /* #define P DBL_MANT_DIG */
@@ -87,23 +90,23 @@ Exactly one of IEEE_8087, IEEE_MC68k, VAX, or IBM should be defined.
 /* Int_max = floor(P*log(FLT_RADIX)/log(10) - 1) */
 
 #if defined(IEEE_8087) + defined(IEEE_MC68k)
-#define Exp_shift  20
+#define Exp_shift 20
 #define Exp_shift1 20
-#define Exp_msk1    0x100000
-#define Exp_msk11   0x100000
-#define Exp_mask  0x7ff00000
+#define Exp_msk1 0x100000
+#define Exp_msk11 0x100000
+#define Exp_mask 0x7ff00000
 #define P 53
 #define Bias 1023
 #define IEEE_Arith
 #define Emin (-1022)
-#define Exp_1  0x3ff00000
+#define Exp_1 0x3ff00000
 #define Exp_11 0x3ff00000
 #define Ebits 11
-#define Frac_mask  0xfffff
+#define Frac_mask 0xfffff
 #define Frac_mask1 0xfffff
 #define Ten_pmax 22
 #define Bletch 0x10
-#define Bndry_mask  0xfffff
+#define Bndry_mask 0xfffff
 #define Bndry_mask1 0xfffff
 #define LSB 1
 #define Sign_bit 0x80000000
@@ -114,24 +117,24 @@ Exactly one of IEEE_8087, IEEE_MC68k, VAX, or IBM should be defined.
 #define Int_max 14
 #define Infinite(x) (word0(x) == 0x7ff00000) /* sufficient test for here */
 #else
-#undef  Sudden_Underflow
+#undef Sudden_Underflow
 #define Sudden_Underflow
 #ifdef IBM
-#define Exp_shift  24
+#define Exp_shift 24
 #define Exp_shift1 24
-#define Exp_msk1   0x1000000
-#define Exp_msk11  0x1000000
-#define Exp_mask  0x7f000000
+#define Exp_msk1 0x1000000
+#define Exp_msk11 0x1000000
+#define Exp_mask 0x7f000000
 #define P 14
 #define Bias 65
-#define Exp_1  0x41000000
+#define Exp_1 0x41000000
 #define Exp_11 0x41000000
-#define Ebits 8	/* exponent has 7 bits, but 8 is the right value in b2d */
-#define Frac_mask  0xffffff
+#define Ebits 8 /* exponent has 7 bits, but 8 is the right value in b2d */
+#define Frac_mask 0xffffff
 #define Frac_mask1 0xffffff
 #define Bletch 4
 #define Ten_pmax 22
-#define Bndry_mask  0xefffff
+#define Bndry_mask 0xefffff
 #define Bndry_mask1 0xffffff
 #define LSB 1
 #define Sign_bit 0x80000000
@@ -141,21 +144,21 @@ Exactly one of IEEE_8087, IEEE_MC68k, VAX, or IBM should be defined.
 #define Quick_max 14
 #define Int_max 15
 #else /* VAX */
-#define Exp_shift  23
+#define Exp_shift 23
 #define Exp_shift1 7
-#define Exp_msk1    0x80
-#define Exp_msk11   0x800000
-#define Exp_mask  0x7f80
+#define Exp_msk1 0x80
+#define Exp_msk11 0x800000
+#define Exp_mask 0x7f80
 #define P 56
 #define Bias 129
-#define Exp_1  0x40800000
+#define Exp_1 0x40800000
 #define Exp_11 0x4080
 #define Ebits 8
-#define Frac_mask  0x7fffff
+#define Frac_mask 0x7fffff
 #define Frac_mask1 0xffff007f
 #define Ten_pmax 24
 #define Bletch 2
-#define Bndry_mask  0xffff007f
+#define Bndry_mask 0xffff007f
 #define Bndry_mask1 0xffff007f
 #define LSB 0x10000
 #define Sign_bit 0x8000
@@ -172,19 +175,23 @@ Exactly one of IEEE_8087, IEEE_MC68k, VAX, or IBM should be defined.
 #endif
 
 #ifdef RND_PRODQUOT
-#define rounded_product(a,b) a = rnd_prod(a, b)
-#define rounded_quotient(a,b) a = rnd_quot(a, b)
+#define rounded_product(a, b) a = rnd_prod(a, b)
+#define rounded_quotient(a, b) a = rnd_quot(a, b)
 #ifdef KR_headers
-extern double rnd_prod(), rnd_quot();
+                                               extern double
+                                               rnd_prod(),
+    rnd_quot();
 #else
-extern double rnd_prod(double, double), rnd_quot(double, double);
+                                               extern double
+                                               rnd_prod(double, double),
+    rnd_quot(double, double);
 #endif
 #else
-#define rounded_product(a,b) a *= b
-#define rounded_quotient(a,b) a /= b
+#define rounded_product(a, b) a *= b
+#define rounded_quotient(a, b) a /= b
 #endif
 
-#define Big0 (Frac_mask1 | Exp_msk1*(DBL_MAX_EXP+Bias-1))
+#define Big0 (Frac_mask1 | Exp_msk1 * (DBL_MAX_EXP + Bias - 1))
 #define Big1 0xffffffff
 
 #ifndef Just_16
@@ -199,13 +206,10 @@ extern double rnd_prod(double, double), rnd_quot(double, double);
 #endif
 #endif
 
-
 #ifdef __cplusplus
-extern "C" double strtod(const char *s00, char **se);
-extern "C" char *dtoa(double d, int mode, int ndigits,
-			int *decpt, int *sign, char **rve);
+extern "C" double strtod(const char* s00, char** se);
+extern "C" char*  dtoa(double d, int mode, int ndigits, int* decpt, int* sign, char** rve);
 #endif
-
 
 typedef struct _Bigint _Bigint;
 
@@ -213,31 +217,30 @@ typedef struct _Bigint _Bigint;
 #define Bfree _Bfree
 #define multadd _multadd
 #define hi0bits _hi0bits
-#define  ulp 	_ulp
+#define ulp _ulp
 #define b2d _b2d
 #define ratio _ratio
 #define cmp __mcmp
 #define diff __mdiff
-struct _reent ;
-double 		_EXFUN(ulp,(double x));
-double		_EXFUN(b2d,(_Bigint *a , int *e));
-_Bigint *	_EXFUN(Balloc,(struct _reent *p, int k));
-void 		_EXFUN(Bfree,(struct _reent *p, _Bigint *v));
-_Bigint *	_EXFUN(multadd,(struct _reent *p, _Bigint *, int, int));
-_Bigint *	_EXFUN(s2b,(struct _reent *, const char*, int, int, unsigned long));
-_Bigint	*	_EXFUN(i2b,(struct _reent *,int));
-_Bigint *	_EXFUN(mult, (struct _reent *, _Bigint *, _Bigint *));
-_Bigint *	_EXFUN(pow5mult, (struct _reent *, _Bigint *, int k));
-int 		_EXFUN(hi0bits,(unsigned long));
-int 		_EXFUN(lo0bits,(unsigned long *));
-_Bigint *        _EXFUN(d2b,(struct _reent *p, double d, int *e, int *bits));
-_Bigint *        _EXFUN(lshift,(struct _reent *p, _Bigint *b, int k));
-_Bigint *        _EXFUN(diff,(struct _reent *p, _Bigint *a, _Bigint *b));
-int             _EXFUN(cmp,(_Bigint *a, _Bigint *b));
+struct _reent;
+double   _EXFUN(ulp, (double x));
+double   _EXFUN(b2d, (_Bigint * a, int* e));
+_Bigint* _EXFUN(Balloc, (struct _reent * p, int k));
+void     _EXFUN(Bfree, (struct _reent * p, _Bigint* v));
+_Bigint* _EXFUN(multadd, (struct _reent * p, _Bigint*, int, int));
+_Bigint* _EXFUN(s2b, (struct _reent*, const char*, int, int, unsigned long));
+_Bigint* _EXFUN(i2b, (struct _reent*, int));
+_Bigint* _EXFUN(mult, (struct _reent*, _Bigint*, _Bigint*));
+_Bigint* _EXFUN(pow5mult, (struct _reent*, _Bigint*, int k));
+int      _EXFUN(hi0bits, (unsigned long));
+int      _EXFUN(lo0bits, (unsigned long*));
+_Bigint* _EXFUN(d2b, (struct _reent * p, double d, int* e, int* bits));
+_Bigint* _EXFUN(lshift, (struct _reent * p, _Bigint* b, int k));
+_Bigint* _EXFUN(diff, (struct _reent * p, _Bigint* a, _Bigint* b));
+int      _EXFUN(cmp, (_Bigint * a, _Bigint* b));
 
-double		_EXFUN(ratio,(_Bigint *a, _Bigint *b));
-#define Bcopy(x,y) memcpy((char *)&x->_sign, (char *)&y->_sign, (y->_wds-1)*sizeof(x->_x[0]) + sizeof(*x))
-
+double _EXFUN(ratio, (_Bigint * a, _Bigint* b));
+#define Bcopy(x, y) memcpy((char*)&x->_sign, (char*)&y->_sign, (y->_wds - 1) * sizeof(x->_x[0]) + sizeof(*x))
 
 #define tens __mprec_tens
 #define bigtens __mprec_bigtens
@@ -253,5 +256,4 @@ extern _CONST double tinytens[];
 extern _CONST double bigtens[];
 extern _CONST double tens[];
 
-
-double _EXFUN(_mprec_log10,(int));
+double _EXFUN(_mprec_log10, (int));

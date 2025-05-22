@@ -8,7 +8,7 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  */
@@ -23,26 +23,25 @@
 #define hypotf _hypotf_r
 #endif
 
-#if defined (_LIBM_REENT) || ! defined (_REENT_ONLY)
+#if defined(_LIBM_REENT) || !defined(_REENT_ONLY)
 
 #ifdef __STDC__
-	float hypotf(_R1 float x, float y)	/* wrapper hypotf */
+float hypotf(_R1 float x, float y) /* wrapper hypotf */
 #else
-	float hypotf(_R2 x,y)		/* wrapper hypotf */
-	_R3 float x,y;
+float     hypotf(_R2 x, y) /* wrapper hypotf */
+_R3 float x, y;
 #endif
 {
 #ifdef _IEEE_LIBM
-	return __ieee754_hypotf(x,y);
+    return __ieee754_hypotf(x, y);
 #else
-	float z;
-	z = __ieee754_hypotf(x,y);
-	if(_LIB_VERSION == _IEEE_) return z;
-	if((!finitef(z))&&finitef(x)&&finitef(y))
-	    /* hypot overflow */
-	    return (float)__kernel_standard(_R4,(double)x,(double)y,104);
-	else
-	    return z;
+    float z;
+    z = __ieee754_hypotf(x, y);
+    if (_LIB_VERSION == _IEEE_) return z;
+    if ((!finitef(z)) && finitef(x) && finitef(y)) /* hypot overflow */
+        return (float)__kernel_standard(_R4, (double)x, (double)y, 104);
+    else
+        return z;
 #endif
 }
 

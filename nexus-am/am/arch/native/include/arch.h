@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-struct _RegSet {
-};
+struct _RegSet
+{};
 
 #endif

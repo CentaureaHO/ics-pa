@@ -2,12 +2,11 @@
 
 #include <reent.h>
 
-int
-fork ()
+int fork()
 {
 #ifdef REENTRANT_SYSCALLS_PROVIDED
-  return _fork_r (_REENT);
+    return _fork_r(_REENT);
 #else
-  return _fork ();
+    return _fork();
 #endif
 }

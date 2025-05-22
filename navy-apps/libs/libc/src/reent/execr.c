@@ -16,7 +16,7 @@
 
 /* If NO_EXEC is defined, we don't need these functions.  */
 
-#if defined (REENTRANT_SYSCALLS_PROVIDED) || defined (NO_EXEC)
+#if defined(REENTRANT_SYSCALLS_PROVIDED) || defined(NO_EXEC)
 
 int _dummy_exec_syscalls = 1;
 
@@ -28,74 +28,70 @@ int errno;
 
 /*
 FUNCTION
-	<<_fork_r>>---Reentrant version of fork
-	
+    <<_fork_r>>---Reentrant version of fork
+
 INDEX
-	_fork_r
+    _fork_r
 
 ANSI_SYNOPSIS
-	#include <reent.h>
-	int _fork_r(struct _reent *<[ptr]>);
+    #include <reent.h>
+    int _fork_r(struct _reent *<[ptr]>);
 
 TRAD_SYNOPSIS
-	#include <reent.h>
-	int _fork_r(<[ptr]>)
-	struct _reent *<[ptr]>;
+    #include <reent.h>
+    int _fork_r(<[ptr]>)
+    struct _reent *<[ptr]>;
 
 DESCRIPTION
-	This is a reentrant version of <<fork>>.  It
-	takes a pointer to the global data block, which holds
-	<<errno>>.
+    This is a reentrant version of <<fork>>.  It
+    takes a pointer to the global data block, which holds
+    <<errno>>.
 */
 
-int
-_fork_r (ptr)
-     struct _reent *ptr;
+int            _fork_r(ptr)
+struct _reent* ptr;
 {
-  int ret;
+    int ret;
 
-  errno = 0;
-  ret = _fork ();
-  if (errno != 0)
-    ptr->_errno = errno;
-  return ret;
+    errno = 0;
+    ret   = _fork();
+    if (errno != 0) ptr->_errno = errno;
+    return ret;
 }
 
 /*
 FUNCTION
-	<<_wait_r>>---Reentrant version of wait
-	
+    <<_wait_r>>---Reentrant version of wait
+
 INDEX
-	_wait_r
+    _wait_r
 
 ANSI_SYNOPSIS
-	#include <reent.h>
-	int _wait_r(struct _reent *<[ptr]>, int *<[status]>);
+    #include <reent.h>
+    int _wait_r(struct _reent *<[ptr]>, int *<[status]>);
 
 TRAD_SYNOPSIS
-	#include <reent.h>
-	int _wait_r(<[ptr]>, <[status]>)
-	struct _reent *<[ptr]>;
-	int *<[status]>;
+    #include <reent.h>
+    int _wait_r(<[ptr]>, <[status]>)
+    struct _reent *<[ptr]>;
+    int *<[status]>;
 
 DESCRIPTION
-	This is a reentrant version of <<wait>>.  It
-	takes a pointer to the global data block, which holds
-	<<errno>>.
+    This is a reentrant version of <<wait>>.  It
+    takes a pointer to the global data block, which holds
+    <<errno>>.
 */
 
-int
-_wait_r (ptr, status)
-     struct _reent *ptr;
-     int *status;
+int            _wait_r(ptr, status)
+struct _reent* ptr;
+int*           status;
 {
-  int ret;
+    int ret;
 
-  errno = 0;
-  ret = _wait (status);
-  if (errno != 0)
-    ptr->_errno = errno;
-  return ret;
+    errno = 0;
+    ret   = _wait(status);
+    if (errno != 0) ptr->_errno = errno;
+    return ret;
 }
 
 #endif /* ! defined (REENTRANT_SYSCALLS_PROVIDED) */

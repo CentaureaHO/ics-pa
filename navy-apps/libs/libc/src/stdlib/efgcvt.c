@@ -3,45 +3,45 @@ FUNCTION
 <<ecvt>>,<<ecvtf>>,<<fcvt>>,<<fcvtf>>---double or float to string
 
 INDEX
-	ecvt
+    ecvt
 INDEX
-	fcvt
+    fcvt
 
 ANSI_SYNOPSIS
-	#include <stdlib.h>
+    #include <stdlib.h>
 
-	char *ecvt(double <[val]>, int <[chars]>, int *<[decpt]>, int *<[sgn]>);
-	char *ecvtf(float <[val]>, int <[chars]>, int *<[decpt]>, int *<[sgn]>);
+    char *ecvt(double <[val]>, int <[chars]>, int *<[decpt]>, int *<[sgn]>);
+    char *ecvtf(float <[val]>, int <[chars]>, int *<[decpt]>, int *<[sgn]>);
 
-	char *fcvt(double <[val]>, int <[decimals]>, 
+    char *fcvt(double <[val]>, int <[decimals]>,
                    int *<[decpt]>, int *<[sgn]>);
-	char *fcvtf(float <[val]>, int <[decimals]>, 
+    char *fcvtf(float <[val]>, int <[decimals]>,
                     int *<[decpt]>, int *<[sgn]>);
 
 TRAD_SYNOPSIS
-	#include <stdlib.h>
+    #include <stdlib.h>
 
-	char *ecvt(<[val]>, <[chars]>, <[decpt]>, <[sgn]>);
-	double <[val]>;
-	int <[chars]>;
-	int *<[decpt]>;
-	int *<[sgn]>;
-	char *ecvtf(<[val]>, <[chars]>, <[decpt]>, <[sgn]>);
-	float <[val]>;
-	int <[chars]>;
-	int *<[decpt]>;
-	int *<[sgn]>;
+    char *ecvt(<[val]>, <[chars]>, <[decpt]>, <[sgn]>);
+    double <[val]>;
+    int <[chars]>;
+    int *<[decpt]>;
+    int *<[sgn]>;
+    char *ecvtf(<[val]>, <[chars]>, <[decpt]>, <[sgn]>);
+    float <[val]>;
+    int <[chars]>;
+    int *<[decpt]>;
+    int *<[sgn]>;
 
-	char *fcvt(<[val]>, <[decimals]>, <[decpt]>, <[sgn]>);
-	double <[val]>;
-	int <[decimals]>;
-	int *<[decpt]>;
-	int *<[sgn]>;
-	char *fcvtf(<[val]>, <[decimals]>, <[decpt]>, <[sgn]>);
-	float <[val]>;
-	int <[decimals]>;
-	int *<[decpt]>;
-	int *<[sgn]>;
+    char *fcvt(<[val]>, <[decimals]>, <[decpt]>, <[sgn]>);
+    double <[val]>;
+    int <[decimals]>;
+    int *<[decpt]>;
+    int *<[sgn]>;
+    char *fcvtf(<[val]>, <[decimals]>, <[decpt]>, <[sgn]>);
+    float <[val]>;
+    int <[decimals]>;
+    int *<[decpt]>;
+    int *<[sgn]>;
 
 DESCRIPTION
 <<ecvt>> and <<fcvt>> produce (null-terminated) strings of digits
@@ -83,27 +83,27 @@ FUNCTION
 <<gvcvt>>, <<gcvtf>>---format double or float as string
 
 INDEX
-	gcvt
+    gcvt
 INDEX
-	gcvtf
+    gcvtf
 
 ANSI_SYNOPSIS
-	#include <stdlib.h>
+    #include <stdlib.h>
 
-	char *gcvt(double <[val]>, int <[precision]>, char *<[buf]>);
-	char *gcvtf(float <[val]>, int <[precision]>, char *<[buf]>);
+    char *gcvt(double <[val]>, int <[precision]>, char *<[buf]>);
+    char *gcvtf(float <[val]>, int <[precision]>, char *<[buf]>);
 
 TRAD_SYNOPSIS
-	#include <stdlib.h>
+    #include <stdlib.h>
 
-	char *gcvt(<[val]>, <[precision]>, <[buf]>);
-	double <[val]>;
-	int <[precision]>;
-	char *<[buf]>;
-	char *gcvtf(<[val]>, <[precision]>, <[buf]>);
-	float <[val]>;
-	int <[precision]>;
-	char *<[buf]>;
+    char *gcvt(<[val]>, <[precision]>, <[buf]>);
+    double <[val]>;
+    int <[precision]>;
+    char *<[buf]>;
+    char *gcvtf(<[val]>, <[precision]>, <[buf]>);
+    float <[val]>;
+    int <[precision]>;
+    char *<[buf]>;
 
 DESCRIPTION
 <<gcvt>> writes a fully formatted number as a null-terminated
@@ -133,65 +133,33 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 #include <stdlib.h>
 #include "local.h"
 
-char *
-_DEFUN (gcvt, (d, ndigit, buf),
-	double d _AND
-	int ndigit _AND
-	char *buf)
+char* _DEFUN(gcvt, (d, ndigit, buf), double d _AND int ndigit _AND char* buf)
 {
-  return _gcvt (_REENT, d, ndigit, buf, 'g', 0);
+    return _gcvt(_REENT, d, ndigit, buf, 'g', 0);
 }
 
-char *
-_DEFUN (fcvt, (d, ndigit, decpt, sign),
-	double d _AND
-	int ndigit _AND
-	int *decpt _AND
-	int *sign)
+char* _DEFUN(fcvt, (d, ndigit, decpt, sign), double d _AND int ndigit _AND int* decpt _AND int* sign)
 {
-  return fcvtbuf (d, ndigit, decpt, sign, NULL);
+    return fcvtbuf(d, ndigit, decpt, sign, NULL);
 }
 
-char *
-_DEFUN (fcvtf, (d, ndigit, decpt, sign),
-	float d _AND
-	int ndigit _AND
-	int *decpt _AND
-	int *sign)
+char* _DEFUN(fcvtf, (d, ndigit, decpt, sign), float d _AND int ndigit _AND int* decpt _AND int* sign)
 {
-  return fcvt ((float) d, ndigit, decpt, sign);
+    return fcvt((float)d, ndigit, decpt, sign);
 }
 
-
-char *
-_DEFUN (gcvtf, (d, ndigit, buf),
-	float d _AND
-	int ndigit _AND
-	char *buf)
+char* _DEFUN(gcvtf, (d, ndigit, buf), float d _AND int ndigit _AND char* buf)
 {
-  double asd = d;
-  return gcvt (asd, ndigit, buf);
+    double asd = d;
+    return gcvt(asd, ndigit, buf);
 }
 
-
-char *
-_DEFUN (ecvt, (d, ndigit, decpt, sign),
-	double d _AND
-	int ndigit _AND
-	int *decpt _AND
-	int *sign)
+char* _DEFUN(ecvt, (d, ndigit, decpt, sign), double d _AND int ndigit _AND int* decpt _AND int* sign)
 {
-  return ecvtbuf (d, ndigit, decpt, sign, NULL);
+    return ecvtbuf(d, ndigit, decpt, sign, NULL);
 }
 
-char *
-_DEFUN (ecvtf, (d, ndigit, decpt, sign),
-	float d _AND
-	int ndigit _AND
-	int *decpt _AND
-	int *sign)
+char* _DEFUN(ecvtf, (d, ndigit, decpt, sign), float d _AND int ndigit _AND int* decpt _AND int* sign)
 {
-  return ecvt ((double) d, ndigit, decpt, sign);
+    return ecvt((double)d, ndigit, decpt, sign);
 }
-
-

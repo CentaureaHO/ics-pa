@@ -31,20 +31,19 @@ static char sccsid[] = "%W% (Berkeley) %G%";
 #include <varargs.h>
 #endif
 
-int
-vsprintf (str, fmt, ap)
-     char *str;
-     char _CONST *fmt;
-     va_list ap;
+int          vsprintf(str, fmt, ap)
+char*        str;
+char _CONST* fmt;
+va_list      ap;
 {
-  int ret;
-  FILE f;
+    int  ret;
+    FILE f;
 
-  f._flags = __SWR | __SSTR;
-  f._bf._base = f._p = (unsigned char *) str;
-  f._bf._size = f._w = INT_MAX;
-  f._data = _REENT;
-  ret = vfprintf (&f, fmt, ap);
-  *f._p = 0;
-  return ret;
+    f._flags    = __SWR | __SSTR;
+    f._bf._base = f._p = (unsigned char*)str;
+    f._bf._size = f._w = INT_MAX;
+    f._data            = _REENT;
+    ret                = vfprintf(&f, fmt, ap);
+    *f._p              = 0;
+    return ret;
 }

@@ -3,16 +3,16 @@ FUNCTION
 <<labs>>---long integer absolute value
 
 INDEX
-	labs
+    labs
 
 ANSI_SYNOPSIS
-	#include <stdlib.h>
-	long labs(long <[i]>);
+    #include <stdlib.h>
+    long labs(long <[i]>);
 
 TRAD_SYNOPSIS
-	#include <stdlib.h>
-	long labs(<[i]>)
-	long <[i]>;
+    #include <stdlib.h>
+    long labs(<[i]>)
+    long <[i]>;
 
 DESCRIPTION
 <<labs>> returns
@@ -37,13 +37,8 @@ No supporting OS subroutine calls are required.
 
 #include <stdlib.h>
 
-long
-_DEFUN (labs, (x),
-	long x)
+long _DEFUN(labs, (x), long x)
 {
-  if (x < 0)
-    {
-      x = -x;
-    }
-  return x;
+    if (x < 0) { x = -x; }
+    return x;
 }

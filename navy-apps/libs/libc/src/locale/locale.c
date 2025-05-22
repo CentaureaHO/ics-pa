@@ -3,38 +3,38 @@ FUNCTION
 <<setlocale>>, <<localeconv>>---select or query locale
 
 INDEX
-	setlocale
+    setlocale
 INDEX
-	localeconv
+    localeconv
 INDEX
-	_setlocale_r
+    _setlocale_r
 INDEX
-	_localeconv_r
+    _localeconv_r
 
 ANSI_SYNOPSIS
-	#include <locale.h>
-	char *setlocale(int <[category]>, const char *<[locale]>);
-	lconv *localeconv(void);
+    #include <locale.h>
+    char *setlocale(int <[category]>, const char *<[locale]>);
+    lconv *localeconv(void);
 
-	char *_setlocale_r(void *<[reent]>,
+    char *_setlocale_r(void *<[reent]>,
                         int <[category]>, const char *<[locale]>);
-	lconv *_localeconv_r(void *<[reent]>);
+    lconv *_localeconv_r(void *<[reent]>);
 
 TRAD_SYNOPSIS
-	#include <locale.h>
-	char *setlocale(<[category]>, <[locale]>)
-	int <[category]>;
-	char *<[locale]>;
+    #include <locale.h>
+    char *setlocale(<[category]>, <[locale]>)
+    int <[category]>;
+    char *<[locale]>;
 
-	lconv *localeconv();
+    lconv *localeconv();
 
-	char *_setlocale_r(<[reent]>, <[category]>, <[locale]>)
-	char *<[reent]>;
-	int <[category]>;
-	char *<[locale]>;
+    char *_setlocale_r(<[reent]>, <[category]>, <[locale]>)
+    char *<[reent]>;
+    int <[category]>;
+    char *<[locale]>;
 
-	lconv *_localeconv_r(<[reent]>);
-	char *<[reent]>;
+    lconv *_localeconv_r(<[reent]>);
+    char *<[reent]>;
 
 DESCRIPTION
 <<setlocale>> is the facility defined by ANSI C to condition the
@@ -56,7 +56,7 @@ in the <[category]> argument.
 
 <<localeconv>> returns a pointer to a structure (also defined in
 `<<locale.h>>') describing the locale-specific conventions currently
-in effect.  
+in effect.
 
 <<_localeconv_r>> and <<_setlocale_r>> are reentrant versions of
 <<localeconv>> and <<setlocale>> respectively.  The extra argument
@@ -88,53 +88,47 @@ No supporting OS subroutines are required.
 #include <limits.h>
 #include <reent.h>
 
-static _CONST struct lconv lconv = 
-{
-  ".", "", "", "", "", "", "", "", "", "",
-  CHAR_MAX, CHAR_MAX, CHAR_MAX, CHAR_MAX,
-  CHAR_MAX, CHAR_MAX, CHAR_MAX, CHAR_MAX,
+static _CONST struct lconv lconv = {
+    ".",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    CHAR_MAX,
+    CHAR_MAX,
+    CHAR_MAX,
+    CHAR_MAX,
+    CHAR_MAX,
+    CHAR_MAX,
+    CHAR_MAX,
+    CHAR_MAX,
 };
 
-
-char *
-_DEFUN(_setlocale_r, (p, category, locale),
-       struct _reent *p _AND
-       int category _AND
-       _CONST char *locale)
+char* _DEFUN(_setlocale_r, (p, category, locale), struct _reent* p _AND int category _AND _CONST char* locale)
 {
-  if (locale && strcmp (locale, "C") && strcmp (locale, ""))
-   return 0;
+    if (locale && strcmp(locale, "C") && strcmp(locale, "")) return 0;
 
-  p->_current_category = category;
-  
-  p->_current_locale = locale;
-  
-  return "C";
+    p->_current_category = category;
+
+    p->_current_locale = locale;
+
+    return "C";
 }
 
-
-struct lconv *
-_DEFUN(_localeconv_r, (data), 
-      struct _reent *data)
-{
-  return (struct lconv *) &lconv;
-}
+struct lconv* _DEFUN(_localeconv_r, (data), struct _reent* data) { return (struct lconv*)&lconv; }
 
 #ifndef _REENT_ONLY
 
-char *
-_DEFUN(setlocale, (category, locale),
-       int category _AND
-       _CONST char *locale)
+char* _DEFUN(setlocale, (category, locale), int category _AND _CONST char* locale)
 {
-  return _setlocale_r (_REENT, category, locale);
+    return _setlocale_r(_REENT, category, locale);
 }
 
-
-struct lconv *
-_DEFUN_VOID(localeconv)
-{
-  return _localeconv_r (_REENT);
-}
+struct lconv* _DEFUN_VOID(localeconv) { return _localeconv_r(_REENT); }
 
 #endif

@@ -6,7 +6,7 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  *
@@ -24,33 +24,34 @@
 #define lgamma _lgamma_r
 #endif
 
-#if defined (_LIBM_REENT) || ! defined (_REENT_ONLY)
+#if defined(_LIBM_REENT) || !defined(_REENT_ONLY)
 
 #ifdef __STDC__
-	double lgamma(_R1 double x)
+double lgamma(_R1 double x)
 #else
-	double lgamma(_R2 x)
-	_R3 double x;
+double lgamma(_R2 x) _R3 double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-	return __ieee754_lgamma_r(x,&_R4->_signgam);
+    return __ieee754_lgamma_r(x, &_R4->_signgam);
 #else
-        double y;
-        y = __ieee754_lgamma_r(x,&_R4->_signgam);
-        if(_LIB_VERSION == _IEEE_) return y;
-        if(!finite(y)&&finite(x)) {
-            if(floor(x)==x&&x<=0.0)
-                return __kernel_standard(_R4,x,x,15); /* lgamma pole */
-            else
-                return __kernel_standard(_R4,x,x,14); /* lgamma overflow */
-        } else
-            return y;
+    double y;
+    y = __ieee754_lgamma_r(x, &_R4->_signgam);
+    if (_LIB_VERSION == _IEEE_) return y;
+    if (!finite(y) && finite(x))
+    {
+        if (floor(x) == x && x <= 0.0)
+            return __kernel_standard(_R4, x, x, 15); /* lgamma pole */
+        else
+            return __kernel_standard(_R4, x, x, 14); /* lgamma overflow */
+    }
+    else
+        return y;
 #endif
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return (double) _lgammaf_r (_R4, (float) x);
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)_lgammaf_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
-}             
+}
 
 #endif /* defined (_LIBM_REENT) || ! defined (_REENT_ONLY) */

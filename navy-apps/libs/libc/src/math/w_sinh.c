@@ -6,20 +6,19 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  */
-
 
 /*
 FUNCTION
         <<sinh>>, <<sinhf>>---hyperbolic sine
 
 INDEX
-	sinh
+    sinh
 INDEX
-	sinhf
+    sinhf
 
 ANSI_SYNOPSIS
         #include <math.h>
@@ -35,37 +34,37 @@ TRAD_SYNOPSIS
         float <[x]>;
 
 DESCRIPTION
-	<<sinh>> computes the hyperbolic sine of the argument <[x]>.
-	Angles are specified in radians.   <<sinh>>(<[x]>) is defined as 
-	@ifinfo
-	. (exp(<[x]>) - exp(-<[x]>))/2
-	@end ifinfo
-	@tex
-	$${e^x - e^{-x}}\over 2$$
-	@end tex
+    <<sinh>> computes the hyperbolic sine of the argument <[x]>.
+    Angles are specified in radians.   <<sinh>>(<[x]>) is defined as
+    @ifinfo
+    . (exp(<[x]>) - exp(-<[x]>))/2
+    @end ifinfo
+    @tex
+    $${e^x - e^{-x}}\over 2$$
+    @end tex
 
-	<<sinhf>> is identical, save that it takes and returns <<float>> values.
+    <<sinhf>> is identical, save that it takes and returns <<float>> values.
 
 RETURNS
-	The hyperbolic sine of <[x]> is returned.  
+    The hyperbolic sine of <[x]> is returned.
 
-	When the correct result is too large to be representable (an
-	overflow),  <<sinh>> returns <<HUGE_VAL>> with the
-	appropriate sign, and sets the global value <<errno>> to
-	<<ERANGE>>. 
+    When the correct result is too large to be representable (an
+    overflow),  <<sinh>> returns <<HUGE_VAL>> with the
+    appropriate sign, and sets the global value <<errno>> to
+    <<ERANGE>>.
 
-	You can modify error handling for these functions with <<matherr>>.
+    You can modify error handling for these functions with <<matherr>>.
 
 PORTABILITY
-	<<sinh>> is ANSI C.  
-	<<sinhf>> is an extension.
+    <<sinh>> is ANSI C.
+    <<sinhf>> is an extension.
 
 QUICKREF
-	sinh ansi pure
-	sinhf - pure
+    sinh ansi pure
+    sinhf - pure
 */
 
-/* 
+/*
  * wrapper sinh(x)
  */
 
@@ -75,29 +74,28 @@ QUICKREF
 #define sinh _sinh_r
 #endif
 
-#if defined (_LIBM_REENT) || ! defined (_REENT_ONLY)
+#if defined(_LIBM_REENT) || !defined(_REENT_ONLY)
 
 #ifdef __STDC__
-	double sinh(_R1 double x)		/* wrapper sinh */
+double sinh(_R1 double x) /* wrapper sinh */
 #else
-	double sinh(_R2 x)			/* wrapper sinh */
-	_R3 double x;
+double sinh(_R2 x) /* wrapper sinh */
+    _R3 double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-	return __ieee754_sinh(x);
+    return __ieee754_sinh(x);
 #else
-	double z; 
-	z = __ieee754_sinh(x);
-	if(_LIB_VERSION == _IEEE_) return z;
-	if(!finite(z)&&finite(x)) {
-	    return __kernel_standard(_R4,x,x,25); /* sinh overflow */
-	} else
-	    return z;
+    double z;
+    z = __ieee754_sinh(x);
+    if (_LIB_VERSION == _IEEE_) return z;
+    if (!finite(z) && finite(x)) { return __kernel_standard(_R4, x, x, 25); /* sinh overflow */ }
+    else
+        return z;
 #endif
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return (double) _sinhf_r (_R4, (float) x);
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)_sinhf_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }
 

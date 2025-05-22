@@ -6,93 +6,93 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  */
 
 /*
 FUNCTION
-	<<isnan>>,<<isnanf>>,<<isinf>>,<<isinff>>,<<finite>>,<<finitef>>---test for exceptional numbers
+    <<isnan>>,<<isnanf>>,<<isinf>>,<<isinff>>,<<finite>>,<<finitef>>---test for exceptional numbers
 
 INDEX
-	isnan
+    isnan
 INDEX
-	isinf
+    isinf
 INDEX
-	finite
+    finite
 
 INDEX
-	isnanf
+    isnanf
 INDEX
-	isinff
+    isinff
 INDEX
-	finitef
+    finitef
 
 ANSI_SYNOPSIS
-	#include <ieeefp.h>
-	int isnan(double <[arg]>);
-	int isinf(double <[arg]>);
-	int finite(double <[arg]>);
-	int isnanf(float <[arg]>);
-	int isinff(float <[arg]>);
-	int finitef(float <[arg]>);
+    #include <ieeefp.h>
+    int isnan(double <[arg]>);
+    int isinf(double <[arg]>);
+    int finite(double <[arg]>);
+    int isnanf(float <[arg]>);
+    int isinff(float <[arg]>);
+    int finitef(float <[arg]>);
 
 TRAD_SYNOPSIS
-	#include <ieeefp.h>
-	int isnan(<[arg]>)
-	double <[arg]>;
-	int isinf(<[arg]>)
-	double <[arg]>;
-	int finite(<[arg]>);
-	double <[arg]>;
-	int isnanf(<[arg]>);
-	float <[arg]>;
-	int isinff(<[arg]>);
-	float <[arg]>;
-	int finitef(<[arg]>);
-	float <[arg]>;
+    #include <ieeefp.h>
+    int isnan(<[arg]>)
+    double <[arg]>;
+    int isinf(<[arg]>)
+    double <[arg]>;
+    int finite(<[arg]>);
+    double <[arg]>;
+    int isnanf(<[arg]>);
+    float <[arg]>;
+    int isinff(<[arg]>);
+    float <[arg]>;
+    int finitef(<[arg]>);
+    float <[arg]>;
 
 
 DESCRIPTION
-	These functions provide information on the floating point
-	argument supplied.
+    These functions provide information on the floating point
+    argument supplied.
 
-	There are five major number formats - 
-	o+
-	o zero
-	 a number which contains all zero bits.
-	o subnormal
-	 Is used to represent  number with a zero exponent, but a non zero fraction.
-	 o normal
-	  A number with an exponent, and a fraction
-     	o infinity
-	  A number with an all 1's exponent and a zero fraction.
-	o NAN
-	  A number with an all 1's exponent and a non zero fraction.
+    There are five major number formats -
+    o+
+    o zero
+     a number which contains all zero bits.
+    o subnormal
+     Is used to represent  number with a zero exponent, but a non zero fraction.
+     o normal
+      A number with an exponent, and a fraction
+        o infinity
+      A number with an all 1's exponent and a zero fraction.
+    o NAN
+      A number with an all 1's exponent and a non zero fraction.
 
-	o-
+    o-
 
-	<<isnan>> returns 1 if the argument is a nan. <<isinf>>
-	returns 1 if the argument is infinity.  <<finite>> returns 1 if the
-	argument is zero, subnormal or normal.
-	
-	The <<isnanf>>, <<isinff>> and <<finitef>> perform the same
-	operations as their <<isnan>>, <<isinf>> and <<finite>>
-	counterparts, but on single precision floating point numbers.
+    <<isnan>> returns 1 if the argument is a nan. <<isinf>>
+    returns 1 if the argument is infinity.  <<finite>> returns 1 if the
+    argument is zero, subnormal or normal.
+
+    The <<isnanf>>, <<isinff>> and <<finitef>> perform the same
+    operations as their <<isnan>>, <<isinf>> and <<finite>>
+    counterparts, but on single precision floating point numbers.
 
 QUICKREF
-	isnan - pure
+    isnan - pure
 QUICKREF
-	isinf - pure
+    isinf - pure
 QUICKREF
-	finite - pure
+    finite - pure
 QUICKREF
-	isnan - pure
+    isnan - pure
 QUICKREF
-	isinf - pure
+    isinf - pure
 QUICKREF
-	finite - pure
+    finite - pure
 */
 
 /*
@@ -103,20 +103,20 @@ QUICKREF
 #include "fdlibm.h"
 
 #ifdef __STDC__
-	int isnan(double x)
+int isnan(double x)
 #else
-	int isnan(x)
-	double x;
+int    isnan(x)
+double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
-	__int32_t hx,lx;
-	EXTRACT_WORDS(hx,lx,x);
-	hx &= 0x7fffffff;
-	hx |= (__uint32_t)(lx|(-lx))>>31;	
-	hx = 0x7ff00000 - hx;
-	return (int)(((__uint32_t)(hx))>>31);
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return isnanf ((float) x);
+    __int32_t hx, lx;
+    EXTRACT_WORDS(hx, lx, x);
+    hx &= 0x7fffffff;
+    hx |= (__uint32_t)(lx | (-lx)) >> 31;
+    hx = 0x7ff00000 - hx;
+    return (int)(((__uint32_t)(hx)) >> 31);
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return isnanf((float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

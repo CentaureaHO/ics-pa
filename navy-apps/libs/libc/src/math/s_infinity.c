@@ -5,44 +5,44 @@
 
 /*
 FUNCTION
-	<<infinity>>, <<infinityf>>---representation of infinity
+    <<infinity>>, <<infinityf>>---representation of infinity
 
 INDEX
-	infinity
+    infinity
 INDEX
-	infinityf
+    infinityf
 
 ANSI_SYNOPSIS
-	#include <math.h>
-	double infinity(void);
-	float infinityf(void);
+    #include <math.h>
+    double infinity(void);
+    float infinityf(void);
 
 TRAD_SYNOPSIS
-	#include <math.h>
-	double infinity();
-	float infinityf();
+    #include <math.h>
+    double infinity();
+    float infinityf();
 
 
 DESCRIPTION
-	<<infinity>> and <<infinityf>> return the special number IEEE
-	infinity in double and single precision arithmetic
-	respectivly.
+    <<infinity>> and <<infinityf>> return the special number IEEE
+    infinity in double and single precision arithmetic
+    respectivly.
 
 QUICKREF
-	infinity - pure
+    infinity - pure
 
 */
 
 #include "fdlibm.h"
 
-	double infinity()
+double infinity()
 {
 #ifndef _DOUBLE_IS_32BITS
-	double x;
+    double x;
 
-	INSERT_WORDS(x,0x7ff00000,0);
-	return x;
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return (double) infinityf ();
+    INSERT_WORDS(x, 0x7ff00000, 0);
+    return x;
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)infinityf();
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

@@ -3,17 +3,17 @@ FUNCTION
 <<wctomb>>---minimal wide char to multibyte converter
 
 INDEX
-	wctomb
+    wctomb
 
 ANSI_SYNOPSIS
-	#include <stdlib.h>
-	int wctomb(char *<[s]>, wchar_t <[wchar]>);
+    #include <stdlib.h>
+    int wctomb(char *<[s]>, wchar_t <[wchar]>);
 
 TRAD_SYNOPSIS
-	#include <stdlib.h>
-	int wctomb(<[s]>, <[wchar]>)
-	char *<[s]>;
-	wchar_t <[wchar]>;
+    #include <stdlib.h>
+    int wctomb(<[s]>, <[wchar]>)
+    char *<[s]>;
+    wchar_t <[wchar]>;
 
 DESCRIPTION
 This is a minimal ANSI-conforming implementation of <<wctomb>>.  The
@@ -36,14 +36,10 @@ effects vary with the locale.
 */
 
 #include <stdlib.h>
-int
-_DEFUN (wctomb, (s, wchar),
-        char *s _AND
-        wchar_t wchar)
+int _DEFUN(wctomb, (s, wchar), char* s _AND wchar_t wchar)
 {
-        if (s == NULL)
-                return 0;
+    if (s == NULL) return 0;
 
-        *s = (char) wchar;
-        return 1;
+    *s = (char)wchar;
+    return 1;
 }

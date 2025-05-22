@@ -19,7 +19,7 @@
 #ifdef __mc68000__
 #define __IEEE_BIG_ENDIAN
 #endif
-#if defined (__H8300__) || defined (__H8300H__)
+#if defined(__H8300__) || defined(__H8300H__)
 #define __IEEE_BIG_ENDIAN
 #define __SMALL_BITFIELDS
 #endif
@@ -74,7 +74,6 @@
 #endif
 #endif
 
-
 #ifndef __IEEE_BIG_ENDIAN
 #ifndef __IEEE_LITTLE_ENDIAN
 #error Endianess not declared!!
@@ -83,4 +82,3 @@
 
 #endif /* not __IEEE_LITTLE_ENDIAN */
 #endif /* not __IEEE_BIG_ENDIAN */
-

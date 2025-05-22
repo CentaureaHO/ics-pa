@@ -1,3 +1,1 @@
-int isatty(int id) {
-  return 0;
-}
+int isatty(int id) { return 0; }

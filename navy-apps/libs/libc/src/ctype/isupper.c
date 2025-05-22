@@ -35,9 +35,4 @@ No supporting OS subroutines are required.
 #include <ctype.h>
 
 #undef isupper
-int
-_DEFUN(isupper,(c),int c)
-{
-	return((_ctype_ + 1)[c] & _U);
-}
-
+int _DEFUN(isupper, (c), int c) { return ((_ctype_ + 1)[c] & _U); }

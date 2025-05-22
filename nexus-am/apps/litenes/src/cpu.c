@@ -6,17 +6,17 @@ CPU_STATE cpu;
 
 byte CPU_RAM[0x8000];
 
-byte op_code;             // Current instruction code
-int op_value, op_address; // Arguments for current instruction
-int op_cycles;            // Additional instruction cycles used (e.g. when paging occurs)
+byte op_code;               // Current instruction code
+int  op_value, op_address;  // Arguments for current instruction
+int  op_cycles;             // Additional instruction cycles used (e.g. when paging occurs)
 
 unsigned long cpu_cycles;  // Total CPU Cycles Since Power Up (wraps)
 
-void (*cpu_op_address_mode[256])();       // Array of address modes
-void (*cpu_op_handler[256])();            // Array of instruction function pointers
-bool cpu_op_in_base_instruction_set[256]; // true if instruction is in base 6502 instruction set
-char *cpu_op_name[256];                   // Instruction names
-int cpu_op_cycles[256];                   // CPU cycles used by instructions
+void (*cpu_op_address_mode[256])();         // Array of address modes
+void (*cpu_op_handler[256])();              // Array of instruction function pointers
+bool  cpu_op_in_base_instruction_set[256];  // true if instruction is in base 6502 instruction set
+char* cpu_op_name[256];                     // Instruction names
+int   cpu_op_cycles[256];                   // CPU cycles used by instructions
 
 byte cpu_ram_read(word address);
 void cpu_ram_write(word address, byte data);
@@ -46,66 +46,291 @@ void cpu_address_indirect();
 void cpu_address_indirect_x();
 void cpu_address_indirect_y();
 
-static const byte cpu_zn_flag_table[256] =
-{
-  zero_flag,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
-  negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,negative_flag,
+static const byte cpu_zn_flag_table[256] = {
+    zero_flag,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
+    negative_flag,
 };
-
-
 
 // CPU Memory
 
-inline byte cpu_ram_read(word address)
-{
-    return CPU_RAM[address & 0x7FF];
-}
+inline byte cpu_ram_read(word address) { return CPU_RAM[address & 0x7FF]; }
 
-void cpu_ram_write(word address, byte data)
-{
-    CPU_RAM[address & 0x7FF] = data;
-}
-
-
+void cpu_ram_write(word address, byte data) { CPU_RAM[address & 0x7FF] = data; }
 
 // Interrupt Addresses
 
-inline word cpu_nmi_interrupt_address()   { return memory_readw(0xFFFA); }
+inline word cpu_nmi_interrupt_address() { return memory_readw(0xFFFA); }
 inline word cpu_reset_interrupt_address() { return memory_readw(0xFFFC); }
-inline word cpu_irq_interrupt_address()   { return memory_readw(0xFFFE); }
-
-
+inline word cpu_irq_interrupt_address() { return memory_readw(0xFFFE); }
 
 // Stack Routines
 
-void cpu_stack_pushb(byte data) { memory_writeb(0x100 + cpu.SP--, data);       }
-void cpu_stack_pushw(word data) { memory_writew(0xFF + cpu.SP, data); cpu.SP -= 2; }
-byte cpu_stack_popb()           { return memory_readb(0x100 + ++cpu.SP);       }
-word cpu_stack_popw()           { cpu.SP += 2; return memory_readw(0xFF + cpu.SP); }
-
-
+void cpu_stack_pushb(byte data) { memory_writeb(0x100 + cpu.SP--, data); }
+void cpu_stack_pushw(word data)
+{
+    memory_writew(0xFF + cpu.SP, data);
+    cpu.SP -= 2;
+}
+byte cpu_stack_popb() { return memory_readb(0x100 + ++cpu.SP); }
+word cpu_stack_popw()
+{
+    cpu.SP += 2;
+    return memory_readw(0xFF + cpu.SP);
+}
 
 // CPU Instructions
 
@@ -118,13 +343,13 @@ void ____FE____() { /* Instruction for future Extension */ }
 
 #define cpu_update_zn_flags(value) cpu.P = (cpu.P & ~(zero_flag | negative_flag)) | cpu_zn_flag_table[value]
 
-#define cpu_branch(flag) if (flag) cpu.PC = op_address;
-#define cpu_compare(reg) int result = reg - op_value; \
-                         cpu_modify_flag(carry_bp, result >= 0); \
-                         cpu_modify_flag(zero_bp, result == 0); \
-                         cpu_modify_flag(negative_bp, (result >> 7) & 1);
-
-
+#define cpu_branch(flag) \
+    if (flag) cpu.PC = op_address;
+#define cpu_compare(reg)                    \
+    int result = reg - op_value;            \
+    cpu_modify_flag(carry_bp, result >= 0); \
+    cpu_modify_flag(zero_bp, result == 0);  \
+    cpu_modify_flag(negative_bp, (result >> 7) & 1);
 
 // CPU Instructions
 
@@ -157,7 +382,11 @@ void cpu_op_sbc()
 // Bit Manipulation Operations
 
 void cpu_op_and() { cpu_update_zn_flags(cpu.A &= op_value); }
-void cpu_op_bit() { cpu_modify_flag(zero_bp, !(cpu.A & op_value)); cpu.P = (cpu.P & 0x3F) | (0xC0 & op_value); }
+void cpu_op_bit()
+{
+    cpu_modify_flag(zero_bp, !(cpu.A & op_value));
+    cpu.P = (cpu.P & 0x3F) | (0xC0 & op_value);
+}
 void cpu_op_eor() { cpu_update_zn_flags(cpu.A ^= op_value); }
 void cpu_op_ora() { cpu_update_zn_flags(cpu.A |= op_value); }
 void cpu_op_asla()
@@ -239,24 +468,24 @@ void cpu_op_sty() { memory_writeb(op_address, cpu.Y); }
 
 // Transfering
 
-void cpu_op_tax() { cpu_update_zn_flags(cpu.X = cpu.A);  }
-void cpu_op_txa() { cpu_update_zn_flags(cpu.A = cpu.X);  }
-void cpu_op_tay() { cpu_update_zn_flags(cpu.Y = cpu.A);  }
-void cpu_op_tya() { cpu_update_zn_flags(cpu.A = cpu.Y);  }
+void cpu_op_tax() { cpu_update_zn_flags(cpu.X = cpu.A); }
+void cpu_op_txa() { cpu_update_zn_flags(cpu.A = cpu.X); }
+void cpu_op_tay() { cpu_update_zn_flags(cpu.Y = cpu.A); }
+void cpu_op_tya() { cpu_update_zn_flags(cpu.A = cpu.Y); }
 void cpu_op_tsx() { cpu_update_zn_flags(cpu.X = cpu.SP); }
 void cpu_op_txs() { cpu.SP = cpu.X; }
 
 // Branching Positive
 
-void cpu_op_bcs() { cpu_branch(cpu_flag_set(carry_bp));     }
-void cpu_op_beq() { cpu_branch(cpu_flag_set(zero_bp));      }
-void cpu_op_bmi() { cpu_branch(cpu_flag_set(negative_bp));  }
-void cpu_op_bvs() { cpu_branch(cpu_flag_set(overflow_bp));  }
+void cpu_op_bcs() { cpu_branch(cpu_flag_set(carry_bp)); }
+void cpu_op_beq() { cpu_branch(cpu_flag_set(zero_bp)); }
+void cpu_op_bmi() { cpu_branch(cpu_flag_set(negative_bp)); }
+void cpu_op_bvs() { cpu_branch(cpu_flag_set(overflow_bp)); }
 
 // Branching Negative
 
-void cpu_op_bne() { cpu_branch(!cpu_flag_set(zero_bp));     }
-void cpu_op_bcc() { cpu_branch(!cpu_flag_set(carry_bp));    }
+void cpu_op_bne() { cpu_branch(!cpu_flag_set(zero_bp)); }
+void cpu_op_bcc() { cpu_branch(!cpu_flag_set(carry_bp)); }
 void cpu_op_bpl() { cpu_branch(!cpu_flag_set(negative_bp)); }
 void cpu_op_bvc() { cpu_branch(!cpu_flag_set(overflow_bp)); }
 
@@ -266,23 +495,37 @@ void cpu_op_jmp() { cpu.PC = op_address; }
 
 // Subroutines
 
-void cpu_op_jsr() { cpu_stack_pushw(cpu.PC - 1); cpu.PC = op_address; }
+void cpu_op_jsr()
+{
+    cpu_stack_pushw(cpu.PC - 1);
+    cpu.PC = op_address;
+}
 void cpu_op_rts() { cpu.PC = cpu_stack_popw() + 1; }
 
 // Interruptions
 
-void cpu_op_brk() { cpu_stack_pushw(cpu.PC - 1); cpu_stack_pushb(cpu.P); cpu.P |= unused_flag | break_flag; cpu.PC = cpu_nmi_interrupt_address(); }
-void cpu_op_rti() { cpu.P = cpu_stack_popb() | unused_flag; cpu.PC = cpu_stack_popw(); }
+void cpu_op_brk()
+{
+    cpu_stack_pushw(cpu.PC - 1);
+    cpu_stack_pushb(cpu.P);
+    cpu.P |= unused_flag | break_flag;
+    cpu.PC = cpu_nmi_interrupt_address();
+}
+void cpu_op_rti()
+{
+    cpu.P  = cpu_stack_popb() | unused_flag;
+    cpu.PC = cpu_stack_popw();
+}
 
 // Flags
 
-void cpu_op_clc() { cpu_unset_flag(carry_bp);     }
-void cpu_op_cld() { cpu_unset_flag(decimal_bp);   }
+void cpu_op_clc() { cpu_unset_flag(carry_bp); }
+void cpu_op_cld() { cpu_unset_flag(decimal_bp); }
 void cpu_op_cli() { cpu_unset_flag(interrupt_bp); }
-void cpu_op_clv() { cpu_unset_flag(overflow_bp);  }
-void cpu_op_sec() { cpu_set_flag(carry_bp);       }
-void cpu_op_sed() { cpu_set_flag(decimal_bp);     }
-void cpu_op_sei() { cpu_set_flag(interrupt_bp);   }
+void cpu_op_clv() { cpu_unset_flag(overflow_bp); }
+void cpu_op_sec() { cpu_set_flag(carry_bp); }
+void cpu_op_sed() { cpu_set_flag(decimal_bp); }
+void cpu_op_sei() { cpu_set_flag(interrupt_bp); }
 
 // Comparison
 
@@ -292,13 +535,23 @@ void cpu_op_cpy() { cpu_compare(cpu.Y); }
 
 // Increment
 
-void cpu_op_inc() { byte result = op_value + 1; memory_writeb(op_address, result); cpu_update_zn_flags(result); }
+void cpu_op_inc()
+{
+    byte result = op_value + 1;
+    memory_writeb(op_address, result);
+    cpu_update_zn_flags(result);
+}
 void cpu_op_inx() { cpu_update_zn_flags(++cpu.X); }
 void cpu_op_iny() { cpu_update_zn_flags(++cpu.Y); }
 
 // Decrement
 
-void cpu_op_dec() { byte result = op_value - 1; memory_writeb(op_address, result); cpu_update_zn_flags(result); }
+void cpu_op_dec()
+{
+    byte result = op_value - 1;
+    memory_writeb(op_address, result);
+    cpu_update_zn_flags(result);
+}
 void cpu_op_dex() { cpu_update_zn_flags(--cpu.X); }
 void cpu_op_dey() { cpu_update_zn_flags(--cpu.Y); }
 
@@ -306,14 +559,20 @@ void cpu_op_dey() { cpu_update_zn_flags(--cpu.Y); }
 
 void cpu_op_php() { cpu_stack_pushb(cpu.P | 0x30); }
 void cpu_op_pha() { cpu_stack_pushb(cpu.A); }
-void cpu_op_pla() { cpu.A = cpu_stack_popb(); cpu_update_zn_flags(cpu.A); }
+void cpu_op_pla()
+{
+    cpu.A = cpu_stack_popb();
+    cpu_update_zn_flags(cpu.A);
+}
 void cpu_op_plp() { cpu.P = (cpu_stack_popb() & 0xEF) | 0x20; }
-
-
 
 // Extended Instruction Set
 
-void cpu_op_aso() { cpu_op_asl(); cpu_op_ora(); }
+void cpu_op_aso()
+{
+    cpu_op_asl();
+    cpu_op_ora();
+}
 void cpu_op_axa() { memory_writeb(op_address, cpu.A & cpu.X & (op_address >> 8)); }
 void cpu_op_axs() { memory_writeb(op_address, cpu.A & cpu.X); }
 void cpu_op_dcm()
@@ -330,39 +589,48 @@ void cpu_op_ins()
     cpu_op_sbc();
 }
 void cpu_op_lax() { cpu_update_zn_flags(cpu.A = cpu.X = op_value); }
-void cpu_op_lse() { cpu_op_lsr(); cpu_op_eor(); }
-void cpu_op_rla() { cpu_op_rol(); cpu_op_and(); }
-void cpu_op_rra() { cpu_op_ror(); cpu_op_adc(); }
-
-
-
-
+void cpu_op_lse()
+{
+    cpu_op_lsr();
+    cpu_op_eor();
+}
+void cpu_op_rla()
+{
+    cpu_op_rol();
+    cpu_op_and();
+}
+void cpu_op_rra()
+{
+    cpu_op_ror();
+    cpu_op_adc();
+}
 
 // Base 6502 instruction set
 
-#define CPU_OP_BIS(o, c, f, n, a) cpu_op_cycles[0x##o] = c; \
-                                  cpu_op_handler[0x##o] = cpu_op_##f; \
-                                  cpu_op_name[0x##o] = n; \
-                                  cpu_op_address_mode[0x##o] = cpu_address_##a; \
-                                  cpu_op_in_base_instruction_set[0x##o] = true;
+#define CPU_OP_BIS(o, c, f, n, a)                            \
+    cpu_op_cycles[0x##o]                  = c;               \
+    cpu_op_handler[0x##o]                 = cpu_op_##f;      \
+    cpu_op_name[0x##o]                    = n;               \
+    cpu_op_address_mode[0x##o]            = cpu_address_##a; \
+    cpu_op_in_base_instruction_set[0x##o] = true;
 
 // Not implemented instructions
 
-#define CPU_OP_NII(o, a) cpu_op_cycles[0x##o] = 1; \
-                         cpu_op_handler[0x##o] = ____FE____; \
-                         cpu_op_name[0x##o] = "NOP"; \
-                         cpu_op_address_mode[0x##o] = cpu_address_##a; \
-                         cpu_op_in_base_instruction_set[0x##o] = false;
+#define CPU_OP_NII(o, a)                                     \
+    cpu_op_cycles[0x##o]                  = 1;               \
+    cpu_op_handler[0x##o]                 = ____FE____;      \
+    cpu_op_name[0x##o]                    = "NOP";           \
+    cpu_op_address_mode[0x##o]            = cpu_address_##a; \
+    cpu_op_in_base_instruction_set[0x##o] = false;
 
 // Extended instruction set found in other CPUs and implemented for compatibility
 
-#define CPU_OP_EIS(o, c, f, n, a) cpu_op_cycles[0x##o] = c; \
-                                  cpu_op_handler[0x##o] = cpu_op_##f; \
-                                  cpu_op_name[0x##o] = n; \
-                                  cpu_op_address_mode[0x##o] = cpu_address_##a; \
-                                  cpu_op_in_base_instruction_set[0x##o] = false;
-
-
+#define CPU_OP_EIS(o, c, f, n, a)                            \
+    cpu_op_cycles[0x##o]                  = c;               \
+    cpu_op_handler[0x##o]                 = cpu_op_##f;      \
+    cpu_op_name[0x##o]                    = n;               \
+    cpu_op_address_mode[0x##o]            = cpu_address_##a; \
+    cpu_op_in_base_instruction_set[0x##o] = false;
 
 // CPU Lifecycle
 
@@ -374,7 +642,7 @@ void cpu_init()
     CPU_OP_BIS(06, 5, asl, "ASL", zero_page)
     CPU_OP_BIS(08, 3, php, "PHP", implied)
     CPU_OP_BIS(09, 2, ora, "ORA", immediate)
-    CPU_OP_BIS(0A, 2, asla,"ASL", implied)
+    CPU_OP_BIS(0A, 2, asla, "ASL", implied)
     CPU_OP_BIS(0D, 4, ora, "ORA", absolute)
     CPU_OP_BIS(0E, 6, asl, "ASL", absolute)
     CPU_OP_BIS(10, 2, bpl, "BPL", relative)
@@ -392,7 +660,7 @@ void cpu_init()
     CPU_OP_BIS(26, 5, rol, "ROL", zero_page)
     CPU_OP_BIS(28, 4, plp, "PLP", implied)
     CPU_OP_BIS(29, 2, and, "AND", immediate)
-    CPU_OP_BIS(2A, 2, rola,"ROL", implied)
+    CPU_OP_BIS(2A, 2, rola, "ROL", implied)
     CPU_OP_BIS(2C, 4, bit, "BIT", absolute)
     CPU_OP_BIS(2D, 2, and, "AND", absolute)
     CPU_OP_BIS(2E, 6, rol, "ROL", absolute)
@@ -410,7 +678,7 @@ void cpu_init()
     CPU_OP_BIS(46, 5, lsr, "LSR", zero_page)
     CPU_OP_BIS(48, 3, pha, "PHA", implied)
     CPU_OP_BIS(49, 2, eor, "EOR", immediate)
-    CPU_OP_BIS(4A, 2, lsra,"LSR", implied)
+    CPU_OP_BIS(4A, 2, lsra, "LSR", implied)
     CPU_OP_BIS(4C, 3, jmp, "JMP", absolute)
     CPU_OP_BIS(4D, 4, eor, "EOR", absolute)
     CPU_OP_BIS(4E, 6, lsr, "LSR", absolute)
@@ -428,7 +696,7 @@ void cpu_init()
     CPU_OP_BIS(66, 5, ror, "ROR", zero_page)
     CPU_OP_BIS(68, 4, pla, "PLA", implied)
     CPU_OP_BIS(69, 2, adc, "ADC", immediate)
-    CPU_OP_BIS(6A, 2, rora,"ROR", implied)
+    CPU_OP_BIS(6A, 2, rora, "ROR", implied)
     CPU_OP_BIS(6C, 5, jmp, "JMP", indirect)
     CPU_OP_BIS(6D, 4, adc, "ADC", absolute)
     CPU_OP_BIS(6E, 6, ror, "ROR", absolute)
@@ -600,7 +868,7 @@ void cpu_init()
     CPU_OP_NII(FA, implied)
     CPU_OP_NII(FC, absolute_x)
 
-    cpu.P = 0x24;
+    cpu.P  = 0x24;
     cpu.SP = 0x00;
     cpu.A = cpu.X = cpu.Y = 0;
 }
@@ -615,28 +883,27 @@ void cpu_reset()
 void cpu_interrupt()
 {
     // if (ppu_in_vblank()) {
-        if (ppu_generates_nmi()) {
-            cpu.P |= interrupt_flag;
-            cpu_unset_flag(unused_bp);
-            cpu_stack_pushw(cpu.PC);
-            cpu_stack_pushb(cpu.P);
-            cpu.PC = cpu_nmi_interrupt_address();
-        }
+    if (ppu_generates_nmi())
+    {
+        cpu.P |= interrupt_flag;
+        cpu_unset_flag(unused_bp);
+        cpu_stack_pushw(cpu.PC);
+        cpu_stack_pushb(cpu.P);
+        cpu.PC = cpu_nmi_interrupt_address();
+    }
     // }
 }
 
-inline unsigned long cpu_clock()
-{
-    return cpu_cycles;
-}
+inline unsigned long cpu_clock() { return cpu_cycles; }
 
 void cpu_run(long cycles)
 {
-    while (cycles > 0) {
+    while (cycles > 0)
+    {
         op_code = memory_readb(cpu.PC++);
-        if (cpu_op_address_mode[op_code] == 0) {
-        }
-        else {
+        if (cpu_op_address_mode[op_code] == 0) {}
+        else
+        {
             cpu_op_address_mode[op_code]();
             cpu_op_handler[op_code]();
         }
@@ -645,4 +912,3 @@ void cpu_run(long cycles)
         op_cycles = 0;
     }
 }
-

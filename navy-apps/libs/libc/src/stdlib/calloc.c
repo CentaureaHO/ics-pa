@@ -3,25 +3,25 @@ FUNCTION
 <<calloc>>---allocate space for arrays
 
 INDEX
-	calloc
+    calloc
 
 INDEX
-	_calloc_r
+    _calloc_r
 
 ANSI_SYNOPSIS
-	#include <stdlib.h>
-	void *calloc(size_t <[n]>, size_t <[s]>);
-	void *calloc_r(void *<[reent]>, size_t <n>, <size_t> <[s]>);
-	
-TRAD_SYNOPSIS
-	#include <stdlib.h>
-	char *calloc(<[n]>, <[s]>)
-	size_t <[n]>, <[s]>;
+    #include <stdlib.h>
+    void *calloc(size_t <[n]>, size_t <[s]>);
+    void *calloc_r(void *<[reent]>, size_t <n>, <size_t> <[s]>);
 
-	char *_calloc_r(<[reent]>, <[n]>, <[s]>)
-	char *<[reent]>;
-	size_t <[n]>;
-	size_t <[s]>;
+TRAD_SYNOPSIS
+    #include <stdlib.h>
+    char *calloc(<[n]>, <[s]>)
+    size_t <[n]>, <[s]>;
+
+    char *_calloc_r(<[reent]>, <[n]>, <[s]>)
+    char *<[reent]>;
+    size_t <[n]>;
+    size_t <[s]>;
 
 
 
@@ -54,25 +54,20 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 
 #ifndef _REENT_ONLY
 
-_PTR
-_DEFUN (calloc, (n, size),
-	size_t n _AND
-	size_t size)
+_PTR _DEFUN(calloc, (n, size), size_t n _AND size_t size)
 {
-  register char *cp;
+    register char* cp;
 
-  n *= size;
+    n *= size;
 
-  /* While it's tempting to have this call _malloc_r() instead, don't do it.
-     The application may have provided it's own malloc() and we want free()
-     (which will also be replaced) to properly free the buffer we allocate.  */
+    /* While it's tempting to have this call _malloc_r() instead, don't do it.
+       The application may have provided it's own malloc() and we want free()
+       (which will also be replaced) to properly free the buffer we allocate.  */
 
-  cp = malloc (n);
-  if (cp == 0)
-    return 0;
-  memset (cp, '\0', n);
-  return cp;
+    cp = malloc(n);
+    if (cp == 0) return 0;
+    memset(cp, '\0', n);
+    return cp;
 }
 
 #endif
-

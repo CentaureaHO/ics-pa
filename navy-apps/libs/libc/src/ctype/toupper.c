@@ -1,22 +1,22 @@
 
 /*
 FUNCTION
-	<<toupper>>---translate characters to upper case
+    <<toupper>>---translate characters to upper case
 
 INDEX
-	toupper
+    toupper
 INDEX
-	_toupper
+    _toupper
 
 ANSI_SYNOPSIS
-	#include <ctype.h>
-	int toupper(int <[c]>);
-	int _toupper(int <[c]>);
+    #include <ctype.h>
+    int toupper(int <[c]>);
+    int _toupper(int <[c]>);
 
 TRAD_SYNOPSIS
-	#include <ctype.h>
-	int toupper(<[c]>);
-	int _toupper(<[c]>);
+    #include <ctype.h>
+    int toupper(<[c]>);
+    int _toupper(<[c]>);
 
 
 DESCRIPTION
@@ -49,15 +49,6 @@ No supporting OS subroutines are required.
 #undef toupper
 #undef _toupper
 
+int _DEFUN(toupper, (c), int c) { return islower(c) ? c - 'a' + 'A' : c; }
 
-int
-_DEFUN(toupper,(c),int c)
-{
-  return islower(c) ? c - 'a' + 'A' : c;
-}
-
-int
-_DEFUN(_toupper,(c),int c)
-{
-  return islower(c) ? c - 'a' + 'A' : c;
-}
+int _DEFUN(_toupper, (c), int c) { return islower(c) ? c - 'a' + 'A' : c; }

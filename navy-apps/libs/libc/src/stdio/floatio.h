@@ -22,6 +22,6 @@
  */
 
 /* 11-bit exponent (VAX G floating point) is 308 decimal digits */
-#define	MAXEXP		308
+#define MAXEXP 308
 /* 128 bit fraction takes up 39 decimal digits; max reasonable precision */
-#define	MAXFRACT	39
+#define MAXFRACT 39

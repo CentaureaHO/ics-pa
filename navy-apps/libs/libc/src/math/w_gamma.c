@@ -6,7 +6,7 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  *
@@ -15,8 +15,8 @@
 /*
 FUNCTION
         <<gamma>>, <<gammaf>>, <<lgamma>>, <<lgammaf>>, <<gamma_r>>,
-	<<gammaf_r>>, <<lgamma_r>>, <<lgammaf_r>>---logarithmic gamma
-	function
+    <<gammaf_r>>, <<lgamma_r>>, <<lgammaf_r>>---logarithmic gamma
+    function
 INDEX
 gamma
 INDEX
@@ -69,13 +69,13 @@ float <[x]>;
 int <[signgamp]>;
 
 DESCRIPTION
-<<gamma>> calculates 
+<<gamma>> calculates
 @tex
-$\mit ln\bigl(\Gamma(x)\bigr)$, 
+$\mit ln\bigl(\Gamma(x)\bigr)$,
 @end tex
 the natural logarithm of the gamma function of <[x]>.  The gamma function
 (<<exp(gamma(<[x]>))>>) is a generalization of factorial, and retains
-the property that  
+the property that
 @ifinfo
 <<exp(gamma(N))>> is equivalent to <<N*exp(gamma(N-1))>>.
 @end ifinfo
@@ -83,13 +83,13 @@ the property that
 $\mit \Gamma(N)\equiv N\times\Gamma(N-1)$.
 @end tex
 Accordingly, the results of the gamma function itself grow very
-quickly.  <<gamma>> is defined as 
+quickly.  <<gamma>> is defined as
 @tex
 $\mit ln\bigl(\Gamma(x)\bigr)$ rather than simply $\mit \Gamma(x)$
 @end tex
 @ifinfo
 the natural log of the gamma function, rather than the gamma function
-itself, 
+itself,
 @end ifinfo
 to extend the useful range of results representable.
 
@@ -119,7 +119,7 @@ argument which is a pointer to an integer, with the function
 a reentrancy structure.
 
 RETURNS
-Normally, the computed result is returned.  
+Normally, the computed result is returned.
 
 When <[x]> is a nonpositive integer, <<gamma>> returns <<HUGE_VAL>>
 and <<errno>> is set to <<EDOM>>.  If the result overflows, <<gamma>>
@@ -142,33 +142,34 @@ Neither <<gamma>> nor <<gammaf>> is ANSI C.  */
 #define gamma _gamma_r
 #endif
 
-#if defined (_LIBM_REENT) || ! defined (_REENT_ONLY)
+#if defined(_LIBM_REENT) || !defined(_REENT_ONLY)
 
 #ifdef __STDC__
-	double gamma(_R1 double x)
+double gamma(_R1 double x)
 #else
-	double gamma(_R2 x)
-	_R3 double x;
+double gamma(_R2 x) _R3 double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
 #ifdef _IEEE_LIBM
-	return __ieee754_gamma_r(x,&_R4->_signgam);
+    return __ieee754_gamma_r(x, &_R4->_signgam);
 #else
-        double y;
-        y = __ieee754_gamma_r(x,&_R4->_signgam);
-        if(_LIB_VERSION == _IEEE_) return y;
-        if(!finite(y)&&finite(x)) {
-            if(floor(x)==x&&x<=0.0)
-                return __kernel_standard(_R4,x,x,41); /* gamma pole */
-            else
-                return __kernel_standard(_R4,x,x,40); /* gamma overflow */
-        } else
-            return y;
+    double y;
+    y = __ieee754_gamma_r(x, &_R4->_signgam);
+    if (_LIB_VERSION == _IEEE_) return y;
+    if (!finite(y) && finite(x))
+    {
+        if (floor(x) == x && x <= 0.0)
+            return __kernel_standard(_R4, x, x, 41); /* gamma pole */
+        else
+            return __kernel_standard(_R4, x, x, 40); /* gamma overflow */
+    }
+    else
+        return y;
 #endif
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return (double) _gammaf_r (_R4, (float) x);
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)_gammaf_r(_R4, (float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
-}             
+}
 
 #endif /* defined (_LIBM_REENT) || ! defined (_REENT_ONLY) */

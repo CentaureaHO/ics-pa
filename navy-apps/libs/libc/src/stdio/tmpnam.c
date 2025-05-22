@@ -8,38 +8,38 @@ FUNCTION
 <<tmpnam>>, <<tempnam>>---name for a temporary file
 
 INDEX
-	tmpnam
+    tmpnam
 INDEX
-	tempnam
+    tempnam
 INDEX
-	_tmpnam_r
+    _tmpnam_r
 INDEX
-	_tempnam_r
+    _tempnam_r
 
 ANSI_SYNOPSIS
-	#include <stdio.h>
-	char *tmpnam(char *<[s]>);
-	char *tempnam(char *<[dir]>, char *<[pfx]>);
-	char *_tmpnam_r(void *<[reent]>, char *<[s]>);
-	char *_tempnam_r(void *<[reent]>, char *<[dir]>, char *<[pfx]>);
+    #include <stdio.h>
+    char *tmpnam(char *<[s]>);
+    char *tempnam(char *<[dir]>, char *<[pfx]>);
+    char *_tmpnam_r(void *<[reent]>, char *<[s]>);
+    char *_tempnam_r(void *<[reent]>, char *<[dir]>, char *<[pfx]>);
 
 TRAD_SYNOPSIS
-	#include <stdio.h>
-	char *tmpnam(<[s]>)
-	char *<[s]>;
+    #include <stdio.h>
+    char *tmpnam(<[s]>)
+    char *<[s]>;
 
-	char *tempnam(<[dir]>, <[pfx]>)
-	char *<[dir]>;
-	char *<[pfx]>;
+    char *tempnam(<[dir]>, <[pfx]>)
+    char *<[dir]>;
+    char *<[pfx]>;
 
-	char *_tmpnam_r(<[reent]>, <[s]>)
-	char *<[reent]>;
-	char *<[s]>;
+    char *_tmpnam_r(<[reent]>, <[s]>)
+    char *<[reent]>;
+    char *<[s]>;
 
-	char *_tempnam_r(<[reent]>, <[dir]>, <[pfx]>)
-	char *<[reent]>;
-	char *<[dir]>;
-	char *<[pfx]>;
+    char *_tempnam_r(<[reent]>, <[dir]>, <[pfx]>)
+    char *<[reent]>;
+    char *<[dir]>;
+    char *<[pfx]>;
 
 DESCRIPTION
 Use either of these functions to generate a name for a temporary file.
@@ -102,94 +102,65 @@ The global pointer <<environ>> is also required.
 /* Try to open the file specified, if it can be opened then try
    another one.  */
 
-static void
-worker (ptr, result, part1, part2, part3, part4)
-     struct _reent *ptr;
-     char *result;
-     _CONST char *part1;
-     _CONST char *part2;
-     int part3;
-     int *part4;
+static void  worker(ptr, result, part1, part2, part3, part4) struct _reent* ptr;
+char*        result;
+_CONST char* part1;
+_CONST char* part2;
+int          part3;
+int*         part4;
 {
-  /*  Generate the filename and make sure that there isn't one called
-      it already.  */
+    /*  Generate the filename and make sure that there isn't one called
+        it already.  */
 
-  while (1)
+    while (1)
     {
-      int t;
-      _sprintf_r (ptr, result, "%s/%s%x.%x", part1, part2, part3, *part4);
-      t = _open_r (ptr, result, O_RDONLY, 0);
-      if (t == -1)
-	break;
-      (*part4)++;
-      _close_r (ptr, t);
+        int t;
+        _sprintf_r(ptr, result, "%s/%s%x.%x", part1, part2, part3, *part4);
+        t = _open_r(ptr, result, O_RDONLY, 0);
+        if (t == -1) break;
+        (*part4)++;
+        _close_r(ptr, t);
     }
 }
 
-char *
-_DEFUN (_tmpnam_r, (p, s),
-	struct _reent *p _AND
-	char *s)
+char* _DEFUN(_tmpnam_r, (p, s), struct _reent* p _AND char* s)
 {
-  char *result;
-  int pid;
+    char* result;
+    int   pid;
 
-  if (s == NULL)
+    if (s == NULL)
     {
-      result = _malloc_r (p, L_tmpnam + 1);
-      /* ANSI says that a static buf must be used - so
-       if malloc fails, we have one. */
-      if (result == NULL)
-	result = p->_emergency;
+        result = _malloc_r(p, L_tmpnam + 1);
+        /* ANSI says that a static buf must be used - so
+         if malloc fails, we have one. */
+        if (result == NULL) result = p->_emergency;
     }
-  else
-    {
-      result = s;
-    }
-  pid = _getpid_r (p);
+    else { result = s; }
+    pid = _getpid_r(p);
 
-  worker (p, result, "/tmp/", "t", pid, &p->_inc);
+    worker(p, result, "/tmp/", "t", pid, &p->_inc);
 
-  return result;
+    return result;
 }
 
-char *
-_DEFUN (_tempnam_r, (p, dir, pfx),
-	struct _reent *p _AND
-	char *dir _AND
-	char *pfx)
+char* _DEFUN(_tempnam_r, (p, dir, pfx), struct _reent* p _AND char* dir _AND char* pfx)
 {
-  char *filename;
-  int length;
-  if (dir == NULL && (dir = getenv ("TMPDIR")) == NULL)
-    dir = "/tmp/";
+    char* filename;
+    int   length;
+    if (dir == NULL && (dir = getenv("TMPDIR")) == NULL) dir = "/tmp/";
 
-  length = strlen (dir) + strlen (pfx) + 10 + 1;	/* two 8 digit
-							   numbers + . / */
+    length = strlen(dir) + strlen(pfx) + 10 + 1; /* two 8 digit
+                            numbers + . / */
 
-  filename = _malloc_r (p, length);
-  if (filename)
-    {
-      worker (p, filename, dir, pfx, _getpid_r (p) ^ (int) p, &p->_inc);
-    }
-  return filename;
+    filename = _malloc_r(p, length);
+    if (filename) { worker(p, filename, dir, pfx, _getpid_r(p) ^ (int)p, &p->_inc); }
+    return filename;
 }
 
 #ifndef _REENT_ONLY
 
-char *
-_DEFUN (tempnam, (dir, pfx),
-	char *dir _AND
-	char *pfx)
-{
-  return _tempnam_r (_REENT, dir, pfx);
-}
+char* _DEFUN(tempnam, (dir, pfx), char* dir _AND char* pfx) { return _tempnam_r(_REENT, dir, pfx); }
 
-char *
-_DEFUN (tmpnam, (s),
-	char *s)
-{
-  return _tmpnam_r (_REENT, s);
-}
+char* _DEFUN(tmpnam, (s), char* s) { return _tmpnam_r(_REENT, s); }
 
 #endif

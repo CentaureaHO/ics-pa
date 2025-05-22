@@ -35,9 +35,4 @@ No supporting OS subroutines are required.
 #include <ctype.h>
 
 #undef islower
-int
-_DEFUN(islower,(c),int c)
-{
-	return((_ctype_ + 1)[c] & _L);
-}
-
+int _DEFUN(islower, (c), int c) { return ((_ctype_ + 1)[c] & _L); }

@@ -2,13 +2,12 @@
 #define __libfixmath_fixmath_h__
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 /*!
-	\file fixmath.h
-	\brief Functions to perform fast accurate fixed-point math operations.
+    \file fixmath.h
+    \brief Functions to perform fast accurate fixed-point math operations.
 */
 
 #include "uint32.h"

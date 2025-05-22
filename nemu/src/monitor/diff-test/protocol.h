@@ -19,30 +19,33 @@
 
 #include <stdint.h>
 
-union gdb_regs {
-  struct {
-    uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
-    uint32_t eip, eflags;
-    uint32_t cs, ss, ds, es, fs, gs;
-  };
-  struct {
-    uint32_t array[77];
-  };
+union gdb_regs
+{
+    struct
+    {
+        uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
+        uint32_t eip, eflags;
+        uint32_t cs, ss, ds, es, fs, gs;
+    };
+    struct
+    {
+        uint32_t array[77];
+    };
 };
 
 struct gdb_conn;
 
 uint16_t gdb_decode_hex(uint8_t msb, uint8_t lsb);
-uint64_t gdb_decode_hex_str(uint8_t *bytes);
+uint64_t gdb_decode_hex_str(uint8_t* bytes);
 
 uint8_t hex_encode(uint8_t digit);
 
-struct gdb_conn *gdb_begin_inet(const char *addr, uint16_t port);
+struct gdb_conn* gdb_begin_inet(const char* addr, uint16_t port);
 
-void gdb_end(struct gdb_conn *conn);
+void gdb_end(struct gdb_conn* conn);
 
-void gdb_send(struct gdb_conn *conn, const uint8_t *command, size_t size);
+void gdb_send(struct gdb_conn* conn, const uint8_t* command, size_t size);
 
-uint8_t *gdb_recv(struct gdb_conn *conn, size_t *size);
+uint8_t* gdb_recv(struct gdb_conn* conn, size_t* size);
 
-const char * gdb_start_noack(struct gdb_conn *conn);
+const char* gdb_start_noack(struct gdb_conn* conn);

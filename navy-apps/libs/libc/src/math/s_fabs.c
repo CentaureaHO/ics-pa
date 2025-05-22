@@ -6,7 +6,7 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  */
@@ -15,27 +15,27 @@
 FUNCTION
        <<fabs>>, <<fabsf>>---absolute value (magnitude)
 INDEX
-	fabs
+    fabs
 INDEX
-	fabsf
+    fabsf
 
 ANSI_SYNOPSIS
-	#include <math.h>
+    #include <math.h>
        double fabs(double <[x]>);
        float fabsf(float <[x]>);
 
 TRAD_SYNOPSIS
-	#include <math.h>
-       double fabs(<[x]>) 
+    #include <math.h>
+       double fabs(<[x]>)
        double <[x]>;
 
        float fabsf(<[x]>)
        float <[x]>;
 
 DESCRIPTION
-<<fabs>> and <<fabsf>> calculate 
+<<fabs>> and <<fabsf>> calculate
 @tex
-$|x|$, 
+$|x|$,
 @end tex
 the absolute value (magnitude) of the argument <[x]>, by direct
 manipulation of the bit representation of <[x]>.
@@ -56,18 +56,18 @@ PORTABILITY
 #include "fdlibm.h"
 
 #ifdef __STDC__
-	double fabs(double x)
+double fabs(double x)
 #else
-	double fabs(x)
-	double x;
+double fabs(x)
+double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
-	__uint32_t high;
-	GET_HIGH_WORD(high,x);
-	SET_HIGH_WORD(x,high&0x7fffffff);
-        return x;
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return (double) fabsf ((float) x);
+    __uint32_t high;
+    GET_HIGH_WORD(high, x);
+    SET_HIGH_WORD(x, high & 0x7fffffff);
+    return x;
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)fabsf((float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

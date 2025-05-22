@@ -20,20 +20,20 @@ FUNCTION
 <<setvbuf>>---specify file or stream buffering
 
 INDEX
-	setvbuf
+    setvbuf
 
 ANSI_SYNOPSIS
-	#include <stdio.h>
-	int setvbuf(FILE *<[fp]>, char *<[buf]>,
-	            int <[mode]>, size_t <[size]>);
+    #include <stdio.h>
+    int setvbuf(FILE *<[fp]>, char *<[buf]>,
+                int <[mode]>, size_t <[size]>);
 
 TRAD_SYNOPSIS
-	#include <stdio.h>
-	int setvbuf(<[fp]>, <[buf]>, <[mode]>, <[size]>)
-	FILE *<[fp]>;
-	char *<[buf]>;
-	int <[mode]>;
-	size_t <[size]>;
+    #include <stdio.h>
+    int setvbuf(<[fp]>, <[buf]>, <[mode]>, <[size]>)
+    FILE *<[fp]>;
+    char *<[buf]>;
+    int <[mode]>;
+    size_t <[size]>;
 
 DESCRIPTION
 Use <<setvbuf>> to specify what kind of buffering you want for the
@@ -95,70 +95,63 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
  * Set one of the three kinds of buffering, optionally including a buffer.
  */
 
-int
-_DEFUN (setvbuf, (fp, buf, mode, size),
-	register FILE * fp _AND
-	char *buf _AND
-	register int mode _AND
-	register size_t size)
+int _DEFUN(
+    setvbuf, (fp, buf, mode, size), register FILE* fp _AND char* buf _AND register int mode _AND register size_t size)
 {
-  CHECK_INIT (fp);
+    CHECK_INIT(fp);
 
-  /*
-   * Verify arguments.  The `int' limit on `size' is due to this
-   * particular implementation.
-   */
+    /*
+     * Verify arguments.  The `int' limit on `size' is due to this
+     * particular implementation.
+     */
 
-  if ((mode != _IOFBF && mode != _IOLBF && mode != _IONBF) || (int) size < 0)
-    return (EOF);
+    if ((mode != _IOFBF && mode != _IOLBF && mode != _IONBF) || (int)size < 0) return (EOF);
 
-  /*
-   * Write current buffer, if any; drop read count, if any.
-   * Make sure putc() will not think fp is line buffered.
-   * Free old buffer if it was from malloc().  Clear line and
-   * non buffer flags, and clear malloc flag.
-   */
+    /*
+     * Write current buffer, if any; drop read count, if any.
+     * Make sure putc() will not think fp is line buffered.
+     * Free old buffer if it was from malloc().  Clear line and
+     * non buffer flags, and clear malloc flag.
+     */
 
-  (void) fflush (fp);
-  fp->_r = 0;
-  fp->_lbfsize = 0;
-  if (fp->_flags & __SMBF)
-    _free_r (fp->_data, (void *) fp->_bf._base);
-  fp->_flags &= ~(__SLBF | __SNBF | __SMBF);
+    (void)fflush(fp);
+    fp->_r       = 0;
+    fp->_lbfsize = 0;
+    if (fp->_flags & __SMBF) _free_r(fp->_data, (void*)fp->_bf._base);
+    fp->_flags &= ~(__SLBF | __SNBF | __SMBF);
 
-  /*
-   * Now put back whichever flag is needed, and fix _lbfsize
-   * if line buffered.  Ensure output flush on exit if the
-   * stream will be buffered at all.
-   */
+    /*
+     * Now put back whichever flag is needed, and fix _lbfsize
+     * if line buffered.  Ensure output flush on exit if the
+     * stream will be buffered at all.
+     */
 
-  switch (mode)
+    switch (mode)
     {
-    case _IONBF:
-      fp->_flags |= __SNBF;
-      fp->_bf._base = fp->_p = fp->_nbuf;
-      fp->_bf._size = 1;
-      break;
+        case _IONBF:
+            fp->_flags |= __SNBF;
+            fp->_bf._base = fp->_p = fp->_nbuf;
+            fp->_bf._size          = 1;
+            break;
 
-    case _IOLBF:
-      fp->_flags |= __SLBF;
-      fp->_lbfsize = -size;
-      /* FALLTHROUGH */
+        case _IOLBF:
+            fp->_flags |= __SLBF;
+            fp->_lbfsize = -size;
+            /* FALLTHROUGH */
 
-    case _IOFBF:
-      /* no flag */
-      fp->_data->__cleanup = _cleanup_r;
-      fp->_bf._base = fp->_p = (unsigned char *) buf;
-      fp->_bf._size = size;
-      break;
+        case _IOFBF:
+            /* no flag */
+            fp->_data->__cleanup = _cleanup_r;
+            fp->_bf._base = fp->_p = (unsigned char*)buf;
+            fp->_bf._size          = size;
+            break;
     }
 
-  /*
-   * Patch up write count if necessary.
-   */
+    /*
+     * Patch up write count if necessary.
+     */
 
-  if (fp->_flags & __SWR)
-    fp->_w = fp->_flags & (__SLBF | __SNBF) ? 0 : size;
+    if (fp->_flags & __SWR) fp->_w = fp->_flags & (__SLBF | __SNBF) ? 0 : size;
 
-  return 0;
+    return 0;
 }

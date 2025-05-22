@@ -1,18 +1,18 @@
 
 /*
 FUNCTION
-	<<isspace>>---whitespace character predicate
+    <<isspace>>---whitespace character predicate
 
 INDEX
-	isspace
+    isspace
 
 ANSI_SYNOPSIS
-	#include <ctype.h>
-	int isspace(int <[c]>);
+    #include <ctype.h>
+    int isspace(int <[c]>);
 
 TRAD_SYNOPSIS
-	#include <ctype.h>
-	int isspace(<[c]>);
+    #include <ctype.h>
+    int isspace(<[c]>);
 
 DESCRIPTION
 <<isspace>> is a macro which classifies ASCII integer values by table
@@ -34,11 +34,5 @@ No supporting OS subroutines are required.
 #include <_ansi.h>
 #include <ctype.h>
 
-
 #undef isspace
-int
-_DEFUN(isspace,(c),int c)
-{
-	return((_ctype_ + 1)[c] & _S);
-}
-
+int _DEFUN(isspace, (c), int c) { return ((_ctype_ + 1)[c] & _S); }

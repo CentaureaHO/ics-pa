@@ -10,16 +10,16 @@ FUNCTION
 <<exit>>---end program execution
 
 INDEX
-	exit
+    exit
 
 ANSI_SYNOPSIS
-	#include <stdlib.h>
-	void exit(int <[code]>);
+    #include <stdlib.h>
+    void exit(int <[code]>);
 
 TRAD_SYNOPSIS
-	#include <stdlib.h>
-	void exit(<[code]>)
-	int <[code]>;
+    #include <stdlib.h>
+    void exit(<[code]>)
+    int <[code]>;
 
 DESCRIPTION
 Use <<exit>> to return control from a program to the host operating
@@ -54,19 +54,15 @@ Supporting OS subroutines required: <<_exit>>.
  * Exit, flushing stdio buffers if necessary.
  */
 
-void 
-_DEFUN (exit, (code),
-	int code)
+void _DEFUN(exit, (code), int code)
 {
-  register struct _atexit *p;
-  register int n;
+    register struct _atexit* p;
+    register int             n;
 
-  for (p = _REENT->_atexit; p; p = p->_next)
-    for (n = p->_ind; --n >= 0;)
-      (*p->_fns[n]) ();
-  if (_REENT->__cleanup)
-    (*_REENT->__cleanup) (_REENT);
-  _exit (code);
+    for (p = _REENT->_atexit; p; p = p->_next)
+        for (n = p->_ind; --n >= 0;) (*p->_fns[n])();
+    if (_REENT->__cleanup) (*_REENT->__cleanup)(_REENT);
+    _exit(code);
 }
 
 #endif

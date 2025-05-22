@@ -6,7 +6,7 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  */
@@ -20,15 +20,15 @@
 #include "fdlibm.h"
 
 #ifdef __STDC__
-	double significand(double x)
+double significand(double x)
 #else
-	double significand(x)
-	double x;
+double significand(x)
+double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
-	return __ieee754_scalb(x,(double) -ilogb(x));
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return (double) significandf ((float) x);
+    return __ieee754_scalb(x, (double)-ilogb(x));
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)significandf((float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

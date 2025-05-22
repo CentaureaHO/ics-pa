@@ -1,26 +1,26 @@
-/* 
+/*
 FUNCTION
-	<<strlen>>---character string length
-	
+    <<strlen>>---character string length
+
 INDEX
-	strlen
+    strlen
 
 ANSI_SYNOPSIS
-	#include <string.h>
-	size_t strlen(const char *<[str]>);
+    #include <string.h>
+    size_t strlen(const char *<[str]>);
 
 TRAD_SYNOPSIS
-	#include <string.h>
-	size_t strlen(<[str]>)
-	char *<[src]>;
+    #include <string.h>
+    size_t strlen(<[str]>)
+    char *<[src]>;
 
 DESCRIPTION
-	The <<strlen>> function works out the length of the string
-	starting at <<*<[str]>>> by counting chararacters until it
-	reaches a <<NULL>> character.
+    The <<strlen>> function works out the length of the string
+    starting at <<*<[str]>>> by counting chararacters until it
+    reaches a <<NULL>> character.
 
 RETURNS
-	<<strlen>> returns the character count.
+    <<strlen>> returns the character count.
 
 PORTABILITY
 <<strlen>> is ANSI C.
@@ -28,20 +28,17 @@ PORTABILITY
 <<strlen>> requires no supporting OS subroutines.
 
 QUICKREF
-	strlen ansi pure
+    strlen ansi pure
 */
 
 #include <_ansi.h>
 #include <string.h>
 
-size_t
-_DEFUN (strlen, (str),
-	_CONST char *str)
+size_t _DEFUN(strlen, (str), _CONST char* str)
 {
-  _CONST char *start = str;
+    _CONST char* start = str;
 
-  while (*str)
-    str++;
+    while (*str) str++;
 
-  return str - start;
+    return str - start;
 }

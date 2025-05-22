@@ -6,11 +6,10 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  */
-
 
 /*
 
@@ -37,13 +36,13 @@ TRAD_SYNOPSIS
 
 
 DESCRIPTION
-<<tan>> computes the tangent of the argument <[x]>.  
-Angles are specified in radians.  
+<<tan>> computes the tangent of the argument <[x]>.
+Angles are specified in radians.
 
 <<tanf>> is identical, save that it takes and returns <<float>> values.
 
 RETURNS
-The tangent of <[x]> is returned. 
+The tangent of <[x]> is returned.
 
 PORTABILITY
 <<tan>> is ANSI. <<tanf>> is an extension.
@@ -57,8 +56,8 @@ PORTABILITY
  *	__ieee754_rem_pio2	... argument reduction routine
  *
  * Method.
- *      Let S,C and T denote the sin, cos and tan respectively on 
- *	[-PI/4, +PI/4]. Reduce the argument x to y1+y2 = x-k*pi/2 
+ *      Let S,C and T denote the sin, cos and tan respectively on
+ *	[-PI/4, +PI/4]. Reduce the argument x to y1+y2 = x-k*pi/2
  *	in [-pi/4 , +pi/4], and let n = k mod 4.
  *	We have
  *
@@ -76,39 +75,41 @@ PORTABILITY
  *      trig(NaN)    is that NaN;
  *
  * Accuracy:
- *	TRIG(x) returns trig(x) nearly rounded 
+ *	TRIG(x) returns trig(x) nearly rounded
  */
 
 #include "fdlibm.h"
 
 #ifdef __STDC__
-	double tan(double x)
+double tan(double x)
 #else
-	double tan(x)
-	double x;
+double tan(x)
+double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
-	double y[2],z=0.0;
-	__int32_t n,ix;
+    double    y[2], z = 0.0;
+    __int32_t n, ix;
 
     /* High word of x. */
-	GET_HIGH_WORD(ix,x);
+    GET_HIGH_WORD(ix, x);
 
     /* |x| ~< pi/4 */
-	ix &= 0x7fffffff;
-	if(ix <= 0x3fe921fb) return __kernel_tan(x,z,1);
+    ix &= 0x7fffffff;
+    if (ix <= 0x3fe921fb) return __kernel_tan(x, z, 1);
 
     /* tan(Inf or NaN) is NaN */
-	else if (ix>=0x7ff00000) return x-x;		/* NaN */
+    else if (ix >= 0x7ff00000)
+        return x - x; /* NaN */
 
     /* argument reduction needed */
-	else {
-	    n = __ieee754_rem_pio2(x,y);
-	    return __kernel_tan(y[0],y[1],1-((n&1)<<1)); /*   1 -- n even
-							-1 -- n odd */
-	}
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return (double) tanf ((float) x);
+    else
+    {
+        n = __ieee754_rem_pio2(x, y);
+        return __kernel_tan(y[0], y[1], 1 - ((n & 1) << 1)); /*   1 -- n even
+                                    -1 -- n odd */
+    }
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return (double)tanf((float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

@@ -6,7 +6,7 @@
  *
  * Developed at SunPro, a Sun Microsystems, Inc. business.
  * Permission to use, copy, modify, and distribute this
- * software is freely granted, provided that this notice 
+ * software is freely granted, provided that this notice
  * is preserved.
  * ====================================================
  */
@@ -19,17 +19,17 @@
 #include "fdlibm.h"
 
 #ifdef __STDC__
-	int finite(double x)
+int finite(double x)
 #else
-	int finite(x)
-	double x;
+int    finite(x)
+double x;
 #endif
 {
 #ifndef _DOUBLE_IS_32BITS
-	__int32_t hx;
-	GET_HIGH_WORD(hx,x);
-	return  (int)((__uint32_t)((hx&0x7fffffff)-0x7ff00000)>>31);
-#else /* defined (_DOUBLE_IS_32BITS) */
-	return finitef ((float) x);
+    __int32_t hx;
+    GET_HIGH_WORD(hx, x);
+    return (int)((__uint32_t)((hx & 0x7fffffff) - 0x7ff00000) >> 31);
+#else  /* defined (_DOUBLE_IS_32BITS) */
+    return finitef((float)x);
 #endif /* defined (_DOUBLE_IS_32BITS) */
 }

@@ -1,27 +1,27 @@
 /*
 FUNCTION
-	<<strcpy>>---copy string
+    <<strcpy>>---copy string
 
 INDEX
-	strcpy
+    strcpy
 
 ANSI_SYNOPSIS
-	#include <string.h>
-	char *strcpy(char *<[dst]>, const char *<[src]>);
+    #include <string.h>
+    char *strcpy(char *<[dst]>, const char *<[src]>);
 
 TRAD_SYNOPSIS
-	#include <string.h>
-	char *strcpy(<[dst]>, <[src]>)
-	char *<[dst]>;
-	char *<[src]>;
+    #include <string.h>
+    char *strcpy(<[dst]>, <[src]>)
+    char *<[dst]>;
+    char *<[src]>;
 
 DESCRIPTION
-	<<strcpy>> copies the string pointed to by <[src]>
-	(including the terminating null character) to the array
-	pointed to by <[dst]>.
+    <<strcpy>> copies the string pointed to by <[src]>
+    (including the terminating null character) to the array
+    pointed to by <[dst]>.
 
 RETURNS
-	This function returns the initial value of <[dst]>.
+    This function returns the initial value of <[dst]>.
 
 PORTABILITY
 <<strcpy>> is ANSI C.
@@ -29,7 +29,7 @@ PORTABILITY
 <<strcpy>> requires no supporting OS subroutines.
 
 QUICKREF
-	strcpy ansi pure
+    strcpy ansi pure
 */
 
 #include <string.h>
@@ -37,15 +37,11 @@ QUICKREF
 /*SUPPRESS 560*/
 /*SUPPRESS 530*/
 
-char *
-_DEFUN (strcpy, (s1, s2),
-	char *s1 _AND
-	_CONST char *s2)
+char* _DEFUN(strcpy, (s1, s2), char* s1 _AND _CONST char* s2)
 {
-  char *s = s1;
+    char* s = s1;
 
-  while (*s1++ = *s2++)
-    ;
+    while (*s1++ = *s2++);
 
-  return s;
+    return s;
 }
