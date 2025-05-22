@@ -143,7 +143,9 @@ void init_difftest(void)
         close(STDIN_FILENO);
         if (img_file)
         {
-            execlp("qemu-system-i386", "qemu-system-i386", "-S", "-s", "-nographic", "-fda", img_file, NULL);
+            char drive_option[256];
+            snprintf(drive_option, sizeof(drive_option), "file=%s,format=raw,index=0", img_file);
+            execlp("qemu-system-i386", "qemu-system-i386", "-S", "-s", "-nographic", "-drive", drive_option, NULL);
         }
         else
         {
