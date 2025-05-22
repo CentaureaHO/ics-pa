@@ -22,7 +22,7 @@ int _dummy_fstat_syscalls = 1;
 
 /* We use the errno variable used by the system dependent layer.  */
 #undef errno
-int errno;
+extern int errno;
 
 /*
 FUNCTION

@@ -16,6 +16,7 @@ void gdb_exit(void);
 
 static bool is_skip_qemu;
 static bool is_skip_nemu;
+extern char* img_file;
 
 void diff_test_skip_qemu() { is_skip_qemu = true; }
 void diff_test_skip_nemu() { is_skip_nemu = true; }
@@ -85,7 +86,17 @@ void init_difftest(void) {
     }
 
     close(STDIN_FILENO);
-    execlp("qemu-system-i386", "qemu-system-i386", "-S", "-s", "-nographic", NULL);
+    if (img_file)
+    {
+        execlp("qemu-system-i386", "qemu-system-i386", "-S", "-s", "-nographic", "-fda", img_file, NULL);
+    }
+    else
+    {
+        fprintf(stderr,
+            "diff test error: default image is not supported in diff test mode.\n"
+            "Please specify a valid image file.\n");
+        exit(1);
+    }
     perror("exec");
     panic("exec error");
   }
