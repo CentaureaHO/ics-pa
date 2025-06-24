@@ -6,3 +6,5 @@
 !.gitignore
 !README.md
 !runall.sh
+!runall.ps1
+!lib/*

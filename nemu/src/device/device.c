@@ -2,17 +2,25 @@
 
 #ifdef HAS_IOE
 
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <sys/time.h>
 #include <signal.h>
+#endif
 #include <SDL2/SDL.h>
 
 #define TIMER_HZ 100
 #define VGA_HZ 50
 
-static uint64_t         jiffy = 0;
+static uint64_t jiffy = 0;
+#ifndef _WIN32
 static struct itimerval it;
-static int              device_update_flag = false;
-static int              update_screen_flag = false;
+#else
+static uint64_t last_time = 0;
+#endif
+static int device_update_flag = false;
+static int update_screen_flag = false;
 
 void init_serial();
 void init_timer();
@@ -23,6 +31,7 @@ extern void timer_intr();
 extern void send_key(uint8_t, bool);
 extern void update_screen();
 
+#ifndef _WIN32
 static void timer_sig_handler(int signum)
 {
     jiffy++;
@@ -34,9 +43,21 @@ static void timer_sig_handler(int signum)
     int ret = setitimer(ITIMER_VIRTUAL, &it, NULL);
     Assert(ret == 0, "Can not set timer");
 }
+#endif
 
 void device_update()
 {
+#ifdef _WIN32
+    uint64_t now = GetTickCount64();
+    if (now - last_time >= 1000 / TIMER_HZ)
+    {
+        last_time = now;
+        jiffy++;
+        timer_intr();
+        device_update_flag = true;
+        if (jiffy % (TIMER_HZ / VGA_HZ) == 0) { update_screen_flag = true; }
+    }
+#endif
     if (!device_update_flag) { return; }
     device_update_flag = false;
 
@@ -84,6 +105,9 @@ void init_device()
     init_vga();
     init_i8042();
 
+#ifdef _WIN32
+    last_time = GetTickCount64();
+#else
     struct sigaction s;
     memset(&s, 0, sizeof(s));
     s.sa_handler = timer_sig_handler;
@@ -94,6 +118,7 @@ void init_device()
     it.it_value.tv_usec = 1000000 / TIMER_HZ;
     ret                 = setitimer(ITIMER_VIRTUAL, &it, NULL);
     Assert(ret == 0, "Can not set timer");
+#endif
 }
 #else
 

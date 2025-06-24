@@ -32,7 +32,7 @@ int _EXFUN(toascii, (int c));
 #define _S 010
 #define _P 020
 #define _C 040
-#define _X 0100
+#define _Xf 0100
 #define _B 0200
 
 extern _CONST char _ctype_[];
@@ -41,7 +41,7 @@ extern _CONST char _ctype_[];
 #define isupper(c) ((_ctype_ + 1)[c] & _U)
 #define islower(c) ((_ctype_ + 1)[c] & _L)
 #define isdigit(c) ((_ctype_ + 1)[c] & _N)
-#define isxdigit(c) ((_ctype_ + 1)[c] & (_X | _N))
+#define isxdigit(c) ((_ctype_ + 1)[c] & (_Xf | _N))
 #define isspace(c) ((_ctype_ + 1)[c] & _S)
 #define ispunct(c) ((_ctype_ + 1)[c] & _P)
 #define isalnum(c) ((_ctype_ + 1)[c] & (_U | _L | _N))

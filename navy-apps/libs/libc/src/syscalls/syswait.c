@@ -1,6 +1,7 @@
 /* connector for wait */
 
 #include <reent.h>
+#include <_syslist.h>
 
 int  wait(status)
 int* status;

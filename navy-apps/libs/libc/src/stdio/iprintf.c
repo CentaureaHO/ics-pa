@@ -37,6 +37,9 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 
 #include <_ansi.h>
 #include <stdio.h>
+#include <stdarg.h>
+
+extern int vfiprintf(FILE*, const char*, va_list);
 
 #ifndef _REENT_ONLY
 

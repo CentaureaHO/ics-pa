@@ -1,4 +1,3 @@
-
 /* @(#)fdlibm.h 5.1 93/09/24 */
 /*
  * ====================================================
@@ -141,6 +140,28 @@ extern float __ieee754_scalbf __P((float, int));
 #else
 extern float __ieee754_scalbf __P((float, float));
 #endif
+
+extern float log1pf __P((float));
+float fabsf(float x);
+float atanf(float x);
+float expm1f(float x);
+float sinf(float x);
+float cosf(float x);
+float scalbnf(float x, int n);
+int isnanf(float x);
+int finitef(float x);
+float rintf(float x);
+float floorf(float x);
+double log1p(double x);
+double expm1(double x);
+double scalbn(double x, int n);
+int isnan(double x);
+int finite(double x);
+double rint(double x);
+float copysignf(float x, float y);
+int ilogbf(float x);
+double copysign(double x, double y);
+int ilogb(double x);
 
 /* float versions of fdlibm kernel functions */
 extern float __kernel_sinf    __P((float, float, int));

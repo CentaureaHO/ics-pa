@@ -24,8 +24,7 @@
 #include "local.h"
 #include "glue.h"
 
-static void    std(ptr, flags, file, data) FILE* ptr;
-struct _reent* data;
+static void std(FILE* ptr, int flags, int file, struct _reent* data)
 {
     ptr->_p        = 0;
     ptr->_r        = 0;

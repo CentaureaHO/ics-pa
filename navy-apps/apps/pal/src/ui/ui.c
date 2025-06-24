@@ -21,6 +21,8 @@
 
 #include "main.h"
 
+extern char* strdup(const char* s);
+
 LPSPRITE gpSpriteUI = NULL;
 
 INT PAL_InitUI(VOID)

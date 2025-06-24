@@ -1,6 +1,7 @@
 /* connector for getpid */
 
 #include <reent.h>
+#include <_syslist.h>
 
 int getpid()
 {

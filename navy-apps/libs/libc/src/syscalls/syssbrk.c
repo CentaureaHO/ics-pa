@@ -2,6 +2,7 @@
 
 #include <reent.h>
 #include <unistd.h>
+#include <_syslist.h>
 
 extern void* _sbrk_r(struct _reent*, size_t);
 extern void* _sbrk(size_t);

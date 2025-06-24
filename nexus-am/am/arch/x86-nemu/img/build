@@ -1,12 +1,42 @@
 #!/bin/bash
 
-DIR=${AM_HOME}/am/arch/x86-nemu/img
+# Function to normalize paths to Windows format
+normalize_path() {
+    local path="$1"
+    # Convert /d/... to D:/...
+    if [[ "$path" =~ ^/([a-zA-Z])/ ]]; then
+        path="${BASH_REMATCH[1]}:${path:2}"
+    fi
+
+    echo "$path" | sed 's|//|/|g'
+}
+
+DIR=$(dirname "$0")
 DEST=$1
 shift
 
-make -C $DIR/boot -s
+make -C "$DIR/boot" -s
 
-ld -melf_i386 --gc-sections -T $DIR/loader.ld -e _start -o $DEST $DIR/boot/start.o --start-group $@ --end-group
-objdump -d $DEST > $DEST.txt
+OBJS_NORM=""
+LIBS_NORM=""
+for arg in "$@"; do
+    norm_arg=$(normalize_path "$arg")
+    if [[ "$norm_arg" == *.o ]]; then
+        OBJS_NORM="$OBJS_NORM $norm_arg"
+    else
+        LIBS_NORM="$LIBS_NORM $norm_arg"
+    fi
+done
 
-objcopy -S --set-section-flags .bss=alloc,contents -O binary $DEST $DEST.bin
+DIR_NORM=$(normalize_path "$DIR")
+DEST_NORM=$(normalize_path "$DEST")
+START_OBJ_NORM=$(normalize_path "$DIR/boot/start.o")
+
+# 1. Link to PE file (.exe)
+ld -m i386pe --gc-sections -T "$DIR_NORM/loader.ld" -e _start -o "$DEST_NORM.exe" $START_OBJ_NORM $OBJS_NORM --start-group $LIBS_NORM --end-group
+# 2. Generate disassembly from the PE file.
+objdump -d "$DEST_NORM.exe" > "$DEST_NORM.txt"
+# 3. Generate a compact binary image.
+objcopy -I pe-i386 -O binary "$DEST_NORM.exe" "$DEST_NORM.bin"
+
+rm -f "$DEST_NORM.exe"

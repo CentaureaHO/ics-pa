@@ -36,4 +36,4 @@ No supporting OS subroutines are required.
 #include <ctype.h>
 
 #undef isxdigit
-int _DEFUN(isxdigit, (c), int c) { return ((_ctype_ + 1)[c] & ((_X) | (_N))); }
+int _DEFUN(isxdigit, (c), int c) { return ((_ctype_ + 1)[c] & ((_Xf) | (_N))); }

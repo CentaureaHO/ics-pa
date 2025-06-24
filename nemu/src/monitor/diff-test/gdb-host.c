@@ -1,10 +1,26 @@
 #include "common.h"
 #include <stdlib.h>
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <unistd.h>
+#endif
 #include "protocol.h"
 
 static struct gdb_conn* conn;
 
+static bool gdb_memcpy_from_qemu_small(uint32_t src, void* dest, int len);
+
+#ifdef _WIN32
+bool gdb_connect_qemu(void)
+{
+    while ((conn = gdb_begin_inet("127.0.0.1", 1234)) == NULL) {
+        Sleep(1);
+    }
+
+    return true;
+}
+#else
 bool gdb_connect_qemu(void)
 {
     // connect to gdbserver on localhost port 1234
@@ -12,6 +28,7 @@ bool gdb_connect_qemu(void)
 
     return true;
 }
+#endif
 
 static bool gdb_memcpy_to_qemu_small(uint32_t dest, void* src, int len)
 {
@@ -59,8 +76,7 @@ bool gdb_getregs(union gdb_regs* r)
     int      i;
     uint8_t* p = reply;
     uint8_t  c;
-    for (i = 0; i < sizeof(union gdb_regs) / sizeof(uint32_t); i++)
-    {
+    for (i = 0; i < sizeof(union gdb_regs) / sizeof(uint32_t); i++) {
         c           = p[8];
         p[8]        = '\0';
         r->array[i] = gdb_decode_hex_str(p);
@@ -110,3 +126,46 @@ bool gdb_si(void)
 }
 
 void gdb_exit(void) { gdb_end(conn); }
+
+#include <ctype.h>
+
+static uint8_t hex_nibble(uint8_t hex) { return isdigit(hex) ? hex - '0' : tolower(hex) - 'a' + 10; }
+
+static bool gdb_memcpy_from_qemu_small(uint32_t src, void* dest, int len)
+{
+    char buf[128];
+    sprintf(buf, "m0x%x,%x", src, len);
+
+    gdb_send(conn, (const uint8_t*)buf, strlen(buf));
+
+    size_t   size;
+    uint8_t* reply = gdb_recv(conn, &size);
+
+    if (size > 0 && reply[0] == 'E') {
+        free(reply);
+        return false;
+    }
+
+    for (int i = 0; i < len && i * 2 + 1 < size; i++) {
+        uint8_t high        = reply[i * 2];
+        uint8_t low         = reply[i * 2 + 1];
+        ((uint8_t*)dest)[i] = (hex_nibble(high) << 4) | hex_nibble(low);
+    }
+
+    free(reply);
+    return true;
+}
+
+bool gdb_memcpy_from_qemu(uint32_t src, void* dest, int len)
+{
+    const int mtu = 1500;
+    bool      ok  = true;
+    while (len > mtu) {
+        ok &= gdb_memcpy_from_qemu_small(src, dest, mtu);
+        src += mtu;
+        dest = (uint8_t*)dest + mtu;
+        len -= mtu;
+    }
+    ok &= gdb_memcpy_from_qemu_small(src, dest, len);
+    return ok;
+}

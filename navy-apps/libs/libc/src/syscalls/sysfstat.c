@@ -2,6 +2,7 @@
 
 #include <reent.h>
 #include <unistd.h>
+#include <_syslist.h>
 
 int          fstat(fd, pstat)
 int          fd;

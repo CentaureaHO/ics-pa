@@ -35,11 +35,10 @@ ifeq ($(ISA), mips32)
 endif
 
 ifeq ($(ISA), x86)
-  CFLAGS_COMMON = -m32 -fno-pic -fno-builtin -fno-stack-protector -fno-omit-frame-pointer -march=i386 -mstringop-strategy=unrolled_loop
+  CFLAGS_COMMON = -m32 -fno-pic -fno-builtin -fno-stack-protector -fno-omit-frame-pointer -march=i386 -mstringop-strategy=unrolled_loop -fno-leading-underscore
   CFLAGS   += $(CFLAGS_COMMON)
-  CXXFLAGS += $(CFLAGS_COMMON) -ffreestanding -fno-rtti -fno-exceptions
+  CXXFLAGS += $(CFLAGS_COMMON) -ffreestanding -fno-rtti -fno-exceptions -mno-stack-arg-probe -fno-stack-check
   ASFLAGS  += -m32
-  LDFLAGS  += -melf_i386
 endif
 
 # Files to be compiled

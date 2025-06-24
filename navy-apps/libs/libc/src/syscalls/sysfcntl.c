@@ -2,6 +2,7 @@
 /* only called from stdio/fdopen.c, so arg can be int. */
 
 #include <reent.h>
+#include <_syslist.h>
 
 int fcntl(fd, flag, arg)
 int fd;

@@ -25,6 +25,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+extern char* strdup(const char* s);
+extern char* index(const char* s, int c);
+extern int setenv(const char* name, const char* value, int overwrite);
+extern void free(void* ptr);
+
 int _DEFUN(putenv, (str), _CONST char* str)
 {
     register char *p, *equal;

@@ -1,6 +1,7 @@
 /* connector for link */
 
 #include <reent.h>
+#include <_syslist.h>
 
 int link(old, new) char* old;
 char* new;

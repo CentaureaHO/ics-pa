@@ -2,6 +2,7 @@
 
 #include <reent.h>
 #include <unistd.h>
+#include <_syslist.h>
 
 int    read(fd, buf, cnt)
 int    fd;

@@ -162,6 +162,37 @@ FILE* MY_fopen(const char* path, const char* mode);
 
 #ifdef _WIN32
 
+#ifdef __ISA_X86__
+#define CONST const
+#ifndef FALSE
+#define FALSE 0
+#endif
+#ifndef TRUE
+#define TRUE 1
+#endif
+#define VOID void
+typedef char  CHAR;
+typedef short SHORT;
+typedef long  LONG;
+
+typedef unsigned long  ULONG, *PULONG;
+typedef unsigned short USHORT, *PUSHORT;
+typedef unsigned char  UCHAR, *PUCHAR;
+
+typedef unsigned short WORD, *LPWORD;
+typedef unsigned int   DWORD, *LPDWORD;
+typedef int            INT, *LPINT, BOOL, *LPBOOL;
+typedef unsigned int   UINT, *PUINT, UINT32, *PUINT32;
+typedef unsigned char  BYTE, *LPBYTE;
+typedef CONST BYTE*    LPCBYTE;
+typedef FLOAT*         LPFLOAT;
+typedef void*          LPVOID;
+typedef const void*    LPCVOID;
+typedef CHAR*          LPSTR;
+typedef const CHAR*    LPCSTR;
+
+#define PAL_HAS_NATIVEMIDI 1
+#else
 #include <windows.h>
 
 #if !defined(__BORLANDC__) && !defined(_WIN32_WCE)
@@ -187,6 +218,7 @@ typedef const BYTE* LPCBYTE;
 #ifndef __WINPHONE__
 #define PAL_HAS_NATIVEMIDI 1
 #endif
+#endif  // __ISA_X86__
 
 #else
 

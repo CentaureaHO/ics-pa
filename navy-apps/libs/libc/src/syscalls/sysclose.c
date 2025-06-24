@@ -1,6 +1,7 @@
 /* connector for close */
 
 #include <reent.h>
+#include <_syslist.h>
 
 int close(fd)
 int fd;

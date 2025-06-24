@@ -46,6 +46,8 @@ Supporting OS subroutine required: <<unlink>>.
 
 #include <stdio.h>
 
+extern int _unlink_r(struct _reent* ptr, const char* filename);
+
 int            _remove_r(ptr, filename)
 struct _reent* ptr;
 _CONST char*   filename;

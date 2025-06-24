@@ -58,6 +58,10 @@ struct tms;
 struct timeval;
 struct timezone;
 
+/* Additional function declarations needed for compilation */
+void _free_r(struct _reent *reent_ptr, void *ptr);
+void _cleanup_r(struct _reent *reent_ptr);
+
 /* Reentrant versions of system calls.  */
 
 extern int _close_r       _PARAMS((struct _reent*, int));

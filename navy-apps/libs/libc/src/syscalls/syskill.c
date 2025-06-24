@@ -1,6 +1,7 @@
 /* connector for kill */
 
 #include <reent.h>
+#include <_syslist.h>
 
 int kill(pid, sig)
 int pid;

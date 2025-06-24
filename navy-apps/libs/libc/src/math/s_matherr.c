@@ -109,6 +109,7 @@ PORTABILITY
 */
 
 #include "fdlibm.h"
+#include "assert.h"
 
 #ifdef __STDC__
 int matherr(struct exception* x)

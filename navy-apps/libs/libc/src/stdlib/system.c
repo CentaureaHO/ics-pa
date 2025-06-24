@@ -55,6 +55,7 @@ Supporting OS subroutines required: <<_exit>>, <<execve>>, <<fork>>,
 #include <stddef.h>
 #include <stdlib.h>
 #include <_syslist.h>
+#include <reent.h>
 
 #ifndef NO_EXEC
 extern int execve();

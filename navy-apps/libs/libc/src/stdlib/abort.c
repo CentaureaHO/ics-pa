@@ -49,6 +49,8 @@ Supporting OS subroutines required: <<getpid>>, <<kill>>.
 #include <stdlib.h>
 #include <signal.h>
 
+void _exit(int status);
+
 _VOID
 _DEFUN_VOID(abort)
 {

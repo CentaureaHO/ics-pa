@@ -2,6 +2,30 @@
    and only provide C names, so that we end up in violation of ANSI */
 #ifndef __SYSLIST_H
 #define __SYSLIST_H
+
+/* Forward declarations for all system calls */
+int _fork(void);
+int _wait(int *status);
+int _open(const char *file, int flags, int mode);
+int _close(int fd);
+int _lseek(int fd, int pos, int whence);
+int _read(int fd, void *buf, int cnt);
+int _write(int fd, const void *buf, int cnt);
+int _fstat(int fd, void *pstat);
+int _stat(const char *file, void *pstat);
+int _link(const char *existing, const char *new);
+int _unlink(const char *name);
+void *_sbrk(size_t incr);
+int _kill(int pid, int sig);
+int _getpid(void);
+int _gettimeofday(void *ptimeval, void *ptimezone);
+int _times(void *ptms);
+int _fcntl(int fd, int cmd, int arg);
+int _execve(const char *name, char * const argv[], char * const env[]);
+/* Memory management functions */
+void _free_r(struct _reent *reent_ptr, void *ptr);
+void _cleanup_r(struct _reent *reent_ptr);
+
 #ifdef MISSING_SYSCALL_NAMES
 #define _close close
 #define _fcntl fcntl

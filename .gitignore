@@ -1,8 +1,11 @@
 *.*
 *
 !*/
+!scripts/*
 !Makefile
 !README.md
 !.gitignore
 !init.sh
 !.clang-format
+!win_pal.png
+vcpkg

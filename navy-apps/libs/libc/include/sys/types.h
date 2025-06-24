@@ -58,7 +58,10 @@ typedef unsigned short ino_t;
 #endif
 typedef short          dev_t;
 typedef long           off_t;
+#ifndef _SSIZE_T_DEFINED
 typedef long           ssize_t;
+#define _SSIZE_T_DEFINED
+#endif
 typedef unsigned short uid_t;
 typedef unsigned short gid_t;
 typedef long           key_t;

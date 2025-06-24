@@ -26,6 +26,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+extern void bcopy(const void* src, void* dest, size_t n);
+
 /* _findenv is defined in getenv.c.  */
 
 extern char* _findenv _PARAMS((const char*, int*));

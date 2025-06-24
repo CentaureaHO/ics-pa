@@ -54,6 +54,8 @@ Supporting OS subroutines required: <<_exit>>.
  * Exit, flushing stdio buffers if necessary.
  */
 
+void _exit(int status);
+
 void _DEFUN(exit, (code), int code)
 {
     register struct _atexit* p;

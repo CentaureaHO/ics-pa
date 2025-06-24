@@ -1,6 +1,7 @@
 /* connector for unlink */
 
 #include <reent.h>
+#include <_syslist.h>
 
 int   unlink(file)
 char* file;

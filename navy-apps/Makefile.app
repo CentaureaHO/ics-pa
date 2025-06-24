@@ -37,7 +37,7 @@ $(APP): $(LIBS) $(OBJS)
 ifeq ($(ISA), native)
 	@g++ -o $(APP) $(OBJS) $(LIB_FILES)
 else
-	@$(LD) $(LDFLAGS) -o $(APP) --start-group $(OBJS) $(LIB_FILES) --end-group
+	@bash $(NAVY_HOME)/scripts/$(ISA)/build.sh $(APP) $(OBJS) $(LIB_FILES)
 endif
 
 .PHONY: install run clean

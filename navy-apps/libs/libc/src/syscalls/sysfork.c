@@ -1,6 +1,7 @@
 /* connector for fork */
 
 #include <reent.h>
+#include <_syslist.h>
 
 int fork()
 {

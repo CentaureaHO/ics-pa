@@ -2,6 +2,7 @@
 
 #include <reent.h>
 #include <fcntl.h>
+#include <_syslist.h>
 
 #ifdef _HAVE_STDC
 

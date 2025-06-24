@@ -26,6 +26,7 @@ ISA_DEF = __ISA_$(shell echo $(ISA) | tr a-z A-Z)__
 
 INCLUDES  = $(addprefix -I, $(INC_DIR)) -I$(AM_HOME)/am/
 INCLUDES += -I$(AM_HOME)/am/arch/$(ARCH)/include
+INCLUDES += -I$(AM_HOME)/libs/klib/include
 CFLAGS   += -std=gnu99 -O2 -MMD -Wall -Werror -ggdb $(INCLUDES) -D$(ISA_DEF) -fno-builtin
 CXXFLAGS += -std=c++11 -O2 -MMD -Wall -Werror -ggdb $(INCLUDES) -D$(ISA_DEF) -fno-builtin
 ASFLAGS  +=                -MMD                     $(INCLUDES) -D$(ISA_DEF)
@@ -51,7 +52,7 @@ CXXFLAGS += $(CFLAGS_COMMON) -ffreestanding -fno-rtti -fno-exceptions
 endif
 
 ifeq ($(ISA), x86)
-CFLAGS_COMMON = -m32 -fno-pic -fno-builtin -fno-stack-protector -fno-omit-frame-pointer -march=i386 -mstringop-strategy=unrolled_loop
+CFLAGS_COMMON = -m32 -fno-pic -fno-builtin -fno-stack-protector -fno-omit-frame-pointer -march=i386 -mstringop-strategy=unrolled_loop -fno-leading-underscore -nostdlib -ffreestanding
 CFLAGS   += $(CFLAGS_COMMON)
 CXXFLAGS += $(CFLAGS_COMMON) -ffreestanding -fno-rtti -fno-exceptions
 ASFLAGS  += -m32

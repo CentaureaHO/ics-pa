@@ -133,6 +133,10 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 #include <stdlib.h>
 #include "local.h"
 
+extern char* fcvtbuf(double d, int ndigit, int* decpt, int* sign, char* buf);
+extern char* ecvtbuf(double d, int ndigit, int* decpt, int* sign, char* buf);
+extern char* _gcvt(struct _reent* reent_ptr, double d, int ndigit, char* buf, char mode, int altform);
+
 char* _DEFUN(gcvt, (d, ndigit, buf), double d _AND int ndigit _AND char* buf)
 {
     return _gcvt(_REENT, d, ndigit, buf, 'g', 0);

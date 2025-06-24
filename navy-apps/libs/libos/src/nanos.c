@@ -11,14 +11,25 @@
 
 // FIXME: this is temporary
 
-int _syscall_(int type, uintptr_t a0, uintptr_t a1, uintptr_t a2)
+void __main() {}  // empty __main function to satisfy GCC's requirement on Windows
+
+#ifdef _WIN32
+__declspec(dllimport) extern int errno;
+#else
+extern int errno;
+#endif
+
+int* __errno_location(void) { return &errno; }
+int* __imp__errno(void) { return &errno; }  // to satisfy GCC's requirement on Windows
+
+int syscall(int type, uintptr_t a0, uintptr_t a1, uintptr_t a2)
 {
     int ret = -1;
     asm volatile("int $0x80" : "=a"(ret) : "a"(type), "b"(a0), "c"(a1), "d"(a2));
     return ret;
 }
 
-void _exit(int status) { _syscall_(SYS_exit, status, 0, 0); }
+void _exit(int status) { syscall(SYS_exit, status, 0, 0); }
 
 int _open(const char* path, int flags, mode_t mode) { _exit(SYS_open); }
 

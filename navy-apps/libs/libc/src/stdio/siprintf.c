@@ -40,6 +40,8 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
 #include <reent.h>
 #include "local.h"
 
+extern int vfiprintf(FILE*, const char*, va_list);
+
 int
 #ifdef _HAVE_STDC
 _DEFUN (siprintf, (str, fmt), char *str _AND _CONST char *fmt _DOTS)

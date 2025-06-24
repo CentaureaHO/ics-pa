@@ -15,6 +15,12 @@ _Area _heap = {
     .end   = &_heap_end,
 };
 
+// Provide empty __main function to satisfy GCC's requirement on Windows
+void __main()
+{
+    // Do nothing - this is just to satisfy the linker
+}
+
 static void serial_init()
 {
 #ifdef HAS_SERIAL
